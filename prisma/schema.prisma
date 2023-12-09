@@ -6,6 +6,72 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id             String              @id @default(uuid())
+  email          String              @unique
+  name           String
+  oAuthProviders UserOAuthProvider[]
+  accounts       Account[]
+  transactions   Transaction[]
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+}
+
+model UserOAuthProvider {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  provider       String
+  providerUserId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([provider, providerUserId, userId])
+}
+
+model Account {
+  id           String        @id @default(uuid())
+  name         String
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[] @relation("TransactionFromAccount")
+  transfers    Transaction[] @relation("TransactionToAccount")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+model TransactionCategory {
+  id           String        @id @default(uuid())
+  name         String
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Transaction {
+  id            String               @id @default(uuid())
+  description   String?
+  categoryId    String?
+  category      TransactionCategory? @relation(fields: [categoryId], references: [id])
+  userId        String
+  user          User                 @relation(fields: [userId], references: [id])
+  type          TransactionType
+  fromAccountId String
+  fromAccount   Account              @relation("TransactionFromAccount", fields: [fromAccountId], references: [id])
+  toAccountId   String?
+  toAccount     Account?             @relation("TransactionToAccount", fields: [toAccountId], references: [id])
+  amount        Int
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
 }
