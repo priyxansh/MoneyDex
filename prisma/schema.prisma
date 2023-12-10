@@ -11,10 +11,22 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum Currency {
+  INR
+  USD
+  CAD
+  AUD
+  EUR
+  GBP
+  RUB
+  JPY
+}
+
 model User {
   id             String              @id @default(uuid())
   email          String              @unique
   name           String
+  currency       Currency            @default(INR)
   oAuthProviders UserOAuthProvider[]
   accounts       Account[]
   transactions   Transaction[]
