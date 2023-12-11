@@ -26,6 +26,7 @@ model User {
   id             String              @id @default(uuid())
   email          String              @unique
   name           String
+  image          String?
   currency       Currency            @default(INR)
   oAuthProviders UserOAuthProvider[]
   accounts       Account[]
