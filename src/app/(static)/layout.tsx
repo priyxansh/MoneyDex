@@ -6,10 +6,10 @@ type StaticLayoutProps = {
 
 const StaticLayout = ({ children }: StaticLayoutProps) => {
   return (
-    <div>
+    <>
       <Header />
       {children}
-    </div>
+    </>
   );
 };
 

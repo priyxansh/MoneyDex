@@ -8,7 +8,7 @@ const UserAvatar = async ({}: UserAvatarProps) => {
   const session = await getServerSession(authOptions);
 
   return (
-    <Avatar className="h-8 w-8">
+    <Avatar className="h-7 w-7">
       <AvatarImage src={session?.user.image as string} />
       <AvatarFallback>{session?.user.name?.split("")[0]}</AvatarFallback>
     </Avatar>
