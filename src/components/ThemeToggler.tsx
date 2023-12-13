@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
-import { Moon, Sun } from "lucide-react";
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 type ThemeTogglerProps = {};
 
@@ -15,7 +15,8 @@ const ThemeToggler = ({}: ThemeTogglerProps) => {
 
   return (
     <Button onClick={toggleTheme} variant={"ghost"} size={"icon"}>
-      {theme === "dark" ? <Moon size={18} /> : <Sun size={18} />}
+      <MoonIcon className="hidden dark:block h-[18px] w-[18px]" />
+      <SunIcon className="dark:hidden h-[18px] w-[18px]" />
     </Button>
   );
 };
