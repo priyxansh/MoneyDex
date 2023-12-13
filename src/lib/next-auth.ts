@@ -94,10 +94,14 @@ export const authOptions: NextAuthOptions = {
           },
           select: {
             id: true,
+            name: true,
+            image: true,
           },
         });
 
         token.id = existingUser?.id;
+        token.name = existingUser?.name;
+        token.image = existingUser?.image;
       }
 
       return token;
