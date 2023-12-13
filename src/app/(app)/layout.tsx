@@ -1,3 +1,4 @@
+import BottomBar from "@/components/BottomBar";
 import SideBar from "@/components/SideBar";
 
 type AppLayoutProps = {
@@ -9,6 +10,7 @@ const AppLayout = async ({ children }: AppLayoutProps) => {
     <div>
       <SideBar />
       {children}
+      <BottomBar />
     </div>
   );
 };

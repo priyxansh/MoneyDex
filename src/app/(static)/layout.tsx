@@ -1,4 +1,4 @@
-import NavBar from "@/components/NavBar";
+import Header from "@/components/Header";
 
 type StaticLayoutProps = {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ type StaticLayoutProps = {
 const StaticLayout = ({ children }: StaticLayoutProps) => {
   return (
     <div>
-      <NavBar />
+      <Header />
       {children}
     </div>
   );
