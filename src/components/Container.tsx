@@ -1,9 +1,12 @@
 type ContainerProps = {
   children: React.ReactNode;
+  className?: string;
 };
 
-const Container = ({ children }: ContainerProps) => {
-  return <div className="w-full mx-auto max-w-7xl">{children}</div>;
+const Container = ({ children, className }: ContainerProps) => {
+  return (
+    <div className={`${className} w-full mx-auto max-w-7xl`}>{children}</div>
+  );
 };
 
 export default Container;
