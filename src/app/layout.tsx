@@ -19,7 +19,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} selection:bg-primary selection:text-primary-foreground`}>
         <SessionProvider>
           <ThemeProvider
             attribute="class"
