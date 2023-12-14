@@ -21,7 +21,7 @@ const UserAvatarMenu = async ({}: UserAvatarMenuProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={"outline"} className="rounded-full p-0 w-auto h-auto">
+        <Button variant={"ghost"} className="rounded-full p-0 w-auto h-auto">
           <UserAvatar />
         </Button>
       </DropdownMenuTrigger>
