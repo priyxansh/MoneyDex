@@ -42,7 +42,7 @@ const NavBar = ({ routes }: NavBarProps) => {
       </div>
       <div className="mr-auto">
         <Link href={"/"} className="flex items-center">
-          <span className="text-lg sm:text-xl font-bold">MoneyDex</span>
+          <h2 className="text-lg sm:text-xl font-bold">MoneyDex</h2>
         </Link>
       </div>
       <nav className="hidden sm:flex items-center">
