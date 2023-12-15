@@ -30,7 +30,7 @@ const Header = async ({}: HeaderProps) => {
   ];
 
   return (
-    <header className="px-4 py-3 border-b">
+    <header className="px-4 py-3 border-b-2">
       <Container className="flex">
         <NavBar routes={routes} />
         <div className="flex items-center gap-3 ml-auto">
