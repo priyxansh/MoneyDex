@@ -1,4 +1,4 @@
-import Container from "@/components/Container";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
 type StaticLayoutProps = {
@@ -10,6 +10,7 @@ const StaticLayout = ({ children }: StaticLayoutProps) => {
     <>
       <Header />
       {children}
+      <Footer />
     </>
   );
 };
