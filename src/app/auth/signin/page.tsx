@@ -1,17 +1,26 @@
+import { authOptions } from "@/lib/next-auth";
+import { getServerSession } from "next-auth";
 import GitHub from "@/components/OAuthButtons/GitHub";
 import Google from "@/components/OAuthButtons/Google";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { redirect } from "next/navigation";
 
 type SignInPageProps = {};
 
-const SignInPage = ({}: SignInPageProps) => {
+const SignInPage = async ({}: SignInPageProps) => {
+
+  const session = await getServerSession(authOptions)
+
+  if (session) {
+    redirect("/dashboard")
+  }
+
   return (
     <div className="grid place-items-center">
       <Card className="w-3/12 min-w-fit py-6 px-3 shadow-lg">
