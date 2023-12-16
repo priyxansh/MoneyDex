@@ -1,3 +1,5 @@
+"use client";
+
 import UserAvatar from "./UserAvatar";
 import {
   DropdownMenu,
@@ -8,15 +10,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
-import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/next-auth";
 import SignOutButton from "./SignOutButton";
+import { useSession } from "next-auth/react";
 
 type UserAvatarMenuProps = {};
 
-const UserAvatarMenu = async ({}: UserAvatarMenuProps) => {
-  const session = await getServerSession(authOptions);
+const UserAvatarMenu = ({}: UserAvatarMenuProps) => {
+  const { data: session } = useSession();
+
+  if (!session) return null;
 
   return (
     <DropdownMenu>
@@ -27,8 +29,8 @@ const UserAvatarMenu = async ({}: UserAvatarMenuProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent side={"bottom"} align={"end"}>
         <DropdownMenuLabel className="flex flex-col">
-          <span className="font-bold">{session?.user.name}</span>
-          <span className="text-gray-500 text-sm">{session?.user.email}</span>
+          <span className="font-bold">{session.user.name}</span>
+          <span className="text-gray-500 text-sm">{session.user.email}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>

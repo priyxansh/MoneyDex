@@ -1,11 +1,12 @@
-import { getServerSession } from "next-auth";
+"use client";
+
+import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { authOptions } from "@/lib/next-auth";
 
 type UserAvatarProps = {};
 
-const UserAvatar = async ({}: UserAvatarProps) => {
-  const session = await getServerSession(authOptions);
+const UserAvatar = ({}: UserAvatarProps) => {
+  const { data: session } = useSession();
 
   return (
     <Avatar className="h-7 w-7">

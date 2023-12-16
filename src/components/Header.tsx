@@ -1,15 +1,11 @@
-import { authOptions } from "@/lib/next-auth";
 import Container from "./Container";
 import NavBar from "./NavBar";
 import ThemeToggler from "./ThemeToggler";
 import UserAvatarMenu from "./UserAvatarMenu";
-import { getServerSession } from "next-auth";
 
 type HeaderProps = {};
 
 const Header = async ({}: HeaderProps) => {
-
-  const session = await getServerSession(authOptions);
 
   const routes = [
     {
@@ -35,7 +31,7 @@ const Header = async ({}: HeaderProps) => {
         <NavBar routes={routes} />
         <div className="flex items-center gap-3 ml-auto">
           <ThemeToggler />
-          {session && <UserAvatarMenu />}
+          <UserAvatarMenu />
         </div>
       </Container>
     </header>
