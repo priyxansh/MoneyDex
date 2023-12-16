@@ -76,3 +76,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .h-screen-svh {
+    height: 100vh;
+    height: 100svh;
+  }
+  .min-h-screen-svh {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+}
