@@ -3,13 +3,15 @@
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-type UserAvatarProps = {};
+type UserAvatarProps = {
+  className?: string;
+};
 
-const UserAvatar = ({}: UserAvatarProps) => {
+const UserAvatar = ({ className }: UserAvatarProps) => {
   const { data: session } = useSession();
 
   return (
-    <Avatar className="h-7 w-7">
+    <Avatar className={`h-7 w-7 ${className}`}>
       <AvatarImage src={session?.user.image as string} />
       <AvatarFallback>{session?.user.name?.split("")[0]}</AvatarFallback>
     </Avatar>

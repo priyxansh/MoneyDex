@@ -7,7 +7,7 @@ type AppLayoutProps = {
 
 const AppLayout = async ({ children }: AppLayoutProps) => {
   return (
-    <div>
+    <div className="min-h-screen-svh grid grid-rows-[1fr auto] sm:grid-cols-[250px,1fr]">
       <SideBar />
       {children}
       <BottomBar />
