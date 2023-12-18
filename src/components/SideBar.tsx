@@ -11,6 +11,8 @@ import { PlusIcon } from "@radix-ui/react-icons";
 type SideBarProps = {};
 
 const SideBar = async ({}: SideBarProps) => {
+  const session = (await getServerSession(authOptions)) as Session;
+
   const sideBarRoutes = [
     {
       id: 1,
@@ -28,8 +30,6 @@ const SideBar = async ({}: SideBarProps) => {
       path: "/accounts",
     },
   ];
-
-  const session = (await getServerSession(authOptions)) as Session;
 
   return (
     <aside className="dark:bg-black/20 bg-white/20 py-4 px-3 hidden sm:flex flex-col gap-6 rounded-r-xl border-r shadow-md w-full">
@@ -59,7 +59,7 @@ const SideBar = async ({}: SideBarProps) => {
         </Button>
       </div>
       <div className="mt-auto">
-        <SideBarSeparator className="my-3"/>
+        <SideBarSeparator className="my-3" />
         <div className="flex gap-3 items-center justify-center">
           <UserAvatar className="h-8 w-8" />
           <div>
