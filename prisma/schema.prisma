@@ -50,6 +50,7 @@ model UserOAuthProvider {
 model Account {
   id           String        @id @default(uuid())
   name         String
+  balance      Int           @default(0)
   userId       String
   user         User          @relation(fields: [userId], references: [id])
   transactions Transaction[] @relation("TransactionFromAccount")
