@@ -6,6 +6,7 @@ import { RedirectType, redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/next-auth";
+import { revalidatePath } from "next/cache";
 
 export const createAccount = async (
   data: z.infer<typeof accountFormSchema>
@@ -30,6 +31,8 @@ export const createAccount = async (
         },
       },
     });
+
+    revalidatePath("/accounts");
   } catch (error) {
     return {
       error: {
