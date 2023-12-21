@@ -1,18 +1,15 @@
-import { Session, getServerSession } from "next-auth";
 import UserAvatar from "./UserAvatar";
-import { authOptions } from "@/lib/next-auth";
 import ThemeToggler from "./ThemeToggler";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import SideBarLink from "./SideBarLink";
 import SideBarSeparator from "./SideBarSeparator";
 import { PlusIcon } from "@radix-ui/react-icons";
+import SideBarUserProfile from "./SideBarUserProfile";
 
 type SideBarProps = {};
 
 const SideBar = async ({}: SideBarProps) => {
-  const session = (await getServerSession(authOptions)) as Session;
-
   const sideBarRoutes = [
     {
       id: 1,
@@ -62,12 +59,7 @@ const SideBar = async ({}: SideBarProps) => {
         <SideBarSeparator className="my-3" />
         <div className="flex gap-3 items-center justify-center">
           <UserAvatar className="h-8 w-8" />
-          <div>
-            <p className="font-medium text-base">{session.user.name}</p>
-            <p className="text-sm text-gray-500 break-all">
-              {session.user.email}
-            </p>
-          </div>
+          <SideBarUserProfile />
         </div>
         <div className="flex items-center justify-center mt-3"></div>
       </div>
