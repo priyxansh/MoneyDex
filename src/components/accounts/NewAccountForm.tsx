@@ -15,19 +15,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { accountFormSchema as formSchema } from "@/lib/zod-schemas/accountFormSchema";
 
 type NewAccountFormProps = {};
-
-const formSchema = z.object({
-  accountName: z.string().min(1).max(50),
-  balance: z.coerce
-    .number({ invalid_type_error: "Balance must be a number." })
-    .min(-1000000000)
-    .max(1000000000)
-    .transform((value) => {
-      return +value;
-    }),
-});
 
 const NewAccountForm = ({}: NewAccountFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
