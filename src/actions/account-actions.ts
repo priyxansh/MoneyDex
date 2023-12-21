@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { accountFormSchema } from "@/lib/zod-schemas/accountFormSchema";
-import { RedirectType, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/next-auth";
