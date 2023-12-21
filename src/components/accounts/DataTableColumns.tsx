@@ -38,7 +38,19 @@ export const columns: ColumnDef<Account>[] = [
         currency: "USD",
       }).format(balance);
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return (
+        <div
+          className={`text-right font-medium ${
+            balance === 0
+              ? ""
+              : balance > 0
+              ? "text-primary"
+              : "text-destructive"
+          }`}
+        >
+          {formatted}
+        </div>
+      );
     },
   },
   {
