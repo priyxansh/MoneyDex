@@ -32,7 +32,7 @@ const SideBar = async ({}: SideBarProps) => {
   ];
 
   return (
-    <aside className="dark:bg-black/20 bg-white/20 py-4 px-4 hidden sm:flex flex-col gap-6 rounded-r-xl border-r shadow-md h-screen sticky top-0">
+    <aside className="py-4 px-4 bg-background hidden sm:flex flex-col gap-6 rounded-r-xl border-r shadow-md h-screen sticky top-0">
       <div className="w-full flex justify-center items-center relative">
         <ThemeToggler className="mr-auto" />
         <Link
