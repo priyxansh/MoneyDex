@@ -64,7 +64,7 @@ const NewAccountForm = ({}: NewAccountFormProps) => {
                   <Input placeholder="Account Name" {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is your account's display name.
+                  This is your account&apos;s display name.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -80,7 +80,7 @@ const NewAccountForm = ({}: NewAccountFormProps) => {
                   <Input placeholder="0" {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is your account's initial balance.
+                  This is your account&apos;s initial balance.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
