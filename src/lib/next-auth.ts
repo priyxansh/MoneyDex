@@ -78,6 +78,13 @@ export const authOptions: NextAuthOptions = {
                 },
               ],
             },
+            accounts: {
+              create: [
+                {
+                  name: "Primary",
+                },
+              ],
+            },
           },
         });
 
