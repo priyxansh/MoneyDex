@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import {
@@ -15,11 +14,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { accountFormSchema as formSchema } from "@/lib/zod-schemas/accountFormSchema";
+import { createAccount } from "@/actions/account-actions";
+import CreateAccountButton from "./CreateAccountButton";
+import { useRouter } from "next/navigation";
+import { useToast } from "../ui/use-toast";
 
 type NewAccountFormProps = {};
 
 const NewAccountForm = ({}: NewAccountFormProps) => {
+  const { toast } = useToast();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -28,8 +35,19 @@ const NewAccountForm = ({}: NewAccountFormProps) => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    const result = await createAccount(data);
+
+    if (result?.error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: result.error.message,
+      });
+      return;
+    }
+
+    router.push("/accounts");
   };
 
   return (
@@ -70,9 +88,7 @@ const NewAccountForm = ({}: NewAccountFormProps) => {
           />
         </div>
         <div className="w-full flex gap-2 mt-4 justify-center sm:justify-start">
-          <Button type="submit" className="w-full sm:w-auto max-w-[300px]">
-            Submit
-          </Button>
+          <CreateAccountButton pending={form.formState.isSubmitting} />
         </div>
       </form>
     </Form>
