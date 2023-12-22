@@ -58,7 +58,7 @@ const SideBar = async ({}: SideBarProps) => {
       <div className="mt-auto">
         <SideBarSeparator className="my-3" />
         <div className="flex gap-3 items-center justify-center">
-          <UserAvatar className="h-8 w-8" />
+          <UserAvatar className="h-8 w-8 mr-auto" />
           <SideBarUserProfile />
         </div>
         <div className="flex items-center justify-center mt-3"></div>
