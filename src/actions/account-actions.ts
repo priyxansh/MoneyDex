@@ -66,7 +66,18 @@ export const deleteAccount = async (id: string) => {
       };
     }
 
-    await prisma.account.delete({
+    const deleteTransactionsPromise = prisma.transaction.deleteMany({
+      where: {
+        fromAccount: {
+          id: id,
+        },
+        user: {
+          id: session.user.id,
+        },
+      },
+    });
+
+    const deleteAccountPromise = prisma.account.delete({
       where: {
         id: id,
         user: {
@@ -74,6 +85,11 @@ export const deleteAccount = async (id: string) => {
         },
       },
     });
+
+    await prisma.$transaction([
+      deleteTransactionsPromise,
+      deleteAccountPromise,
+    ]);
 
     revalidatePath("/accounts");
   } catch (error) {
