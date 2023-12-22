@@ -41,3 +41,27 @@ export const createAccount = async (
     };
   }
 };
+
+export const deleteAccount = async (id: string) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  try {
+    await prisma.account.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    revalidatePath("/accounts");
+  } catch (error) {
+    return {
+      error: {
+        message: "Something went wrong",
+      },
+    };
+  }
+};
