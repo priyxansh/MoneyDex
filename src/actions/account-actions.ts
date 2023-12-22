@@ -53,6 +53,9 @@ export const deleteAccount = async (id: string) => {
     await prisma.account.delete({
       where: {
         id: id,
+        user: {
+          id: session.user.id,
+        },
       },
     });
 
