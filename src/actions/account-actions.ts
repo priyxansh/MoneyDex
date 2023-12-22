@@ -50,6 +50,22 @@ export const deleteAccount = async (id: string) => {
   }
 
   try {
+    const accountCount = await prisma.account.count({
+      where: {
+        user: {
+          id: session.user.id,
+        },
+      },
+    });
+
+    if (accountCount === 1) {
+      return {
+        error: {
+          message: "You cannot delete your only account.",
+        },
+      };
+    }
+
     await prisma.account.delete({
       where: {
         id: id,
