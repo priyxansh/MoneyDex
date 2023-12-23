@@ -1,13 +1,10 @@
-import { getServerSession } from "next-auth";
+import { Suspense } from "react";
+import HeroButtons from "./HeroButtons";
 import { Button } from "../ui/button";
-import { authOptions } from "@/lib/next-auth";
-import Link from "next/link";
 
 type HeroProps = {};
 
-const Hero = async ({}: HeroProps) => {
-  const session = await getServerSession(authOptions);
-
+const Hero = ({}: HeroProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
       <div className="text-center sm:text-left flex flex-col gap-4 items-center">
@@ -22,9 +19,9 @@ const Hero = async ({}: HeroProps) => {
           insightful graphs and own your financial journey.
         </p>
         <div className="flex gap-4 w-full justify-center sm:justify-normal flex-wrap">
-          {!session && <Button asChild><Link href={"/auth/signin"}>Get Started</Link></Button>}
-          {session && <Button variant={"secondary"}>Edit Profile</Button>}
-          {session && <Button asChild><Link href={"/dashboard"}>Dashboard</Link></Button>}
+          <Suspense fallback={<Button variant="secondary">Loading...</Button>}>
+            <HeroButtons />
+          </Suspense>
         </div>
       </div>
       <div>{/* Todo: add Hero image/illustration */}</div>
