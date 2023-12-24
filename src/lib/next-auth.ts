@@ -85,6 +85,50 @@ export const authOptions: NextAuthOptions = {
                 },
               ],
             },
+            transactionCategories: {
+              create: [
+                {
+                  name: "Food",
+                  type: "EXPENSE",
+                },
+                {
+                  name: "Transportation",
+                  type: "EXPENSE",
+                },
+                {
+                  name: "Entertainment",
+                  type: "EXPENSE",
+                },
+                {
+                  name: "Shopping",
+                  type: "EXPENSE",
+                },
+                {
+                  name: "Other",
+                  type: "EXPENSE",
+                },
+                {
+                  name: "Salary",
+                  type: "INCOME",
+                },
+                {
+                  name: "Gift",
+                  type: "INCOME",
+                },
+                {
+                  name: "Investment",
+                  type: "INCOME",
+                },
+                {
+                  name: "Freelance",
+                  type: "INCOME",
+                },
+                {
+                  name: "Other",
+                  type: "INCOME",
+                },
+              ],
+            },
           },
         });
 
