@@ -26,6 +26,11 @@ const SideBar = async ({}: SideBarProps) => {
       name: "Accounts",
       path: "/accounts",
     },
+    {
+      id: 4,
+      name: "Categories",
+      path: "/categories",
+    },
   ];
 
   return (

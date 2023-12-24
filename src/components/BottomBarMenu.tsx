@@ -16,6 +16,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 import SignOutButton from "./SignOutButton";
 import DropDownThemeToggler from "./DropDownThemeToggler";
+import Link from "next/link";
 
 type BottomBarMenuProps = {};
 
@@ -46,6 +47,9 @@ const BottomBarMenu = ({}: BottomBarMenuProps) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href={"/categories"}>Categories</Link>
+          </DropdownMenuItem>
           <DropDownThemeToggler />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
