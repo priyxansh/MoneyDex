@@ -23,16 +23,17 @@ enum Currency {
 }
 
 model User {
-  id             String              @id @default(uuid())
-  email          String              @unique
-  name           String
-  image          String?
-  currency       Currency            @default(INR)
-  oAuthProviders UserOAuthProvider[]
-  accounts       Account[]
-  transactions   Transaction[]
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
+  id                    String                @id @default(uuid())
+  email                 String                @unique
+  name                  String
+  image                 String?
+  currency              Currency              @default(INR)
+  oAuthProviders        UserOAuthProvider[]
+  accounts              Account[]
+  transactions          Transaction[]
+  transactionCategories TransactionCategory[]
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
 }
 
 model UserOAuthProvider {
@@ -50,7 +51,7 @@ model UserOAuthProvider {
 model Account {
   id           String        @id @default(uuid())
   name         String
-  balance      Float           @default(0)
+  balance      Float         @default(0)
   userId       String
   user         User          @relation(fields: [userId], references: [id])
   transactions Transaction[] @relation("TransactionFromAccount")
@@ -68,6 +69,8 @@ enum TransactionType {
 model TransactionCategory {
   id           String        @id @default(uuid())
   name         String
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
   transactions Transaction[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
