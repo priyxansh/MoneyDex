@@ -6,19 +6,16 @@ import { getUserCategories } from "@/lib/utils/getUserCategories";
 
 type UserCategoriesDisplayProps = {
   type: "INCOME" | "EXPENSE" | "ALL";
+  searchQuery: string;
 };
 
-const UserCategoriesDisplay = async ({ type }: UserCategoriesDisplayProps) => {
+const UserCategoriesDisplay = async ({
+  type,
+  searchQuery,
+}: UserCategoriesDisplayProps) => {
   const { user } = (await getServerSession(authOptions)) as Session;
 
-  const typeFilter =
-    type === "ALL"
-      ? {}
-      : {
-          equals: type,
-        };
-
-  const userCategories = await getUserCategories(user.id, typeFilter);
+  const userCategories = await getUserCategories(user.id, type, searchQuery);
 
   return (
     <div className="flex items-center py-2 rounded-md gap-2 flex-wrap">

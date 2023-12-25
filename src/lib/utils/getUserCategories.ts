@@ -2,20 +2,17 @@ import prisma from "../prisma";
 
 export const getUserCategories = async (
   userId: string,
-  typeFilter:
-    | {
-        equals?: undefined;
-      }
-    | {
-        equals: "INCOME" | "EXPENSE";
-      }
+  type: "ALL" | "INCOME" | "EXPENSE",
+  searchQuery: string
 ) => {
   const userCategories = await prisma.transactionCategory.findMany({
     where: {
-      user: {
-        id: userId,
+      userId: userId,
+      name: {
+        contains: searchQuery,
+        mode: "insensitive",
       },
-      type: typeFilter,
+      type: type === "ALL" ? undefined : type,
     },
     orderBy: [
       {

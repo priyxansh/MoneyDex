@@ -10,14 +10,19 @@ import { Suspense } from "react";
 type CategoriesPageProps = {
   searchParams?: {
     type?: string;
+    search?: string;
   };
 };
 
 const CategoriesPage = ({ searchParams }: CategoriesPageProps) => {
   const type = searchParams?.type?.toUpperCase() ?? "ALL";
-  const keyString = `search=${searchParams?.type}`;
+  const searchQuery = searchParams?.search ?? "";
+  const keyString = `search=${searchParams?.search}&type=${searchParams?.type}`;
 
   if (type !== "ALL" && type !== "INCOME" && type !== "EXPENSE") {
+    if (searchQuery) {
+      return redirect(`/categories?search=${searchQuery}`);
+    }
     return redirect("/categories");
   }
 
@@ -35,12 +40,12 @@ const CategoriesPage = ({ searchParams }: CategoriesPageProps) => {
         </Button>
       </div>
       <section className="mt-4">
-        <CategoriesFilter defaultValue={type} />
+        <CategoriesFilter />
         <Suspense
           key={keyString}
           fallback={<Spinner className="h-7 w-7 m-auto" />}
         >
-          <UserCategoriesDisplay type={type} />
+          <UserCategoriesDisplay type={type} searchQuery={searchQuery} />
         </Suspense>
       </section>
     </main>
