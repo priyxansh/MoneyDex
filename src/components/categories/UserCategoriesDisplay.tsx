@@ -19,6 +19,9 @@ const UserCategoriesDisplay = async ({
 
   return (
     <div className="flex items-center py-2 rounded-md gap-2 flex-wrap">
+      {!userCategories.length && (
+        <p className="text-sm text-gray-500">No results found.</p>
+      )}
       {userCategories.map((category) => (
         <Button
           asChild
