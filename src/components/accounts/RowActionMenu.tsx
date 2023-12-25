@@ -2,8 +2,9 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import Link from "next/link";
-import DeleteAccountButton from "./DeleteAccountButton";
+import DeleteAccountDialogContent from "./DeleteAccountDialogContent";
 
 import {
   DropdownMenu,
@@ -14,16 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useState } from "react";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 type RowActionMenuProps = {
   accountId: string;
@@ -63,25 +55,10 @@ const RowActionMenu = ({ accountId }: RowActionMenuProps) => {
           </DialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you sure?</DialogTitle>
-          <DialogDescription>
-            This will also delete all transactions related to this account.
-          </DialogDescription>
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center sm:justify-end mt-2">
-            <DialogClose asChild>
-              <Button variant="secondary" className="w-full sm:w-auto">
-                Cancel
-              </Button>
-            </DialogClose>
-            <DeleteAccountButton
-              accountId={accountId}
-              closeDialog={closeDialog}
-            />
-          </div>
-        </DialogHeader>
-      </DialogContent>
+      <DeleteAccountDialogContent
+        accountId={accountId}
+        closeDialog={closeDialog}
+      />
     </Dialog>
   );
 };
