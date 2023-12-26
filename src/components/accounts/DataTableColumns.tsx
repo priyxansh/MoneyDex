@@ -47,7 +47,13 @@ export const columns: ColumnDef<Account>[] = [
     cell: ({ row }) => {
       const account = row.original;
 
-      return <RowActionMenu accountId={account.id} />;
+      return (
+        <RowActionMenu
+          accountId={account.id}
+          accountName={account.name}
+          accountBalance={account.balance}
+        />
+      );
     },
   },
 ];

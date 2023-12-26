@@ -42,6 +42,41 @@ export const createAccount = async (
   }
 };
 
+export const updateAccount = async (
+  id: string,
+  name: string,
+  balance: number
+) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  try {
+    await prisma.account.update({
+      where: {
+        id: id,
+        user: {
+          id: session.user.id,
+        },
+      },
+      data: {
+        name: name,
+        balance: balance,
+      },
+    });
+
+    revalidatePath("/accounts");
+  } catch (error) {
+    return {
+      error: {
+        message: "Something went wrong",
+      },
+    };
+  }
+};
+
 export const deleteAccount = async (id: string) => {
   const session = await getServerSession(authOptions);
 

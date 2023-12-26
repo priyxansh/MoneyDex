@@ -3,7 +3,6 @@
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import Link from "next/link";
 import DeleteAccountDialogContent from "./DeleteAccountDialogContent";
 
 import {
@@ -15,17 +14,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
+import EditAccountDialogContent from "./EditAccountDialogContent";
 
 type RowActionMenuProps = {
   accountId: string;
+  accountName: string;
+  accountBalance: number;
 };
 
-const RowActionMenu = ({ accountId }: RowActionMenuProps) => {
+const RowActionMenu = ({
+  accountId,
+  accountName,
+  accountBalance,
+}: RowActionMenuProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const closeDeleteDialog = () => {
     setDeleteDialogOpen(false);
+  };
+
+  const closeEditDialog = () => {
+    setEditDialogOpen(false);
   };
 
   return (
@@ -41,13 +52,8 @@ const RowActionMenu = ({ accountId }: RowActionMenuProps) => {
         </div>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem asChild>
-            <Link
-              href={`/accounts/${accountId}`}
-              className="w-full cursor-pointer"
-            >
-              Edit Account
-            </Link>
+          <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
+            Edit Account
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setDeleteDialogOpen(true)}>
@@ -59,6 +65,14 @@ const RowActionMenu = ({ accountId }: RowActionMenuProps) => {
         <DeleteAccountDialogContent
           accountId={accountId}
           closeDialog={closeDeleteDialog}
+        />
+      </Dialog>
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <EditAccountDialogContent
+          accountId={accountId}
+          accountName={accountName}
+          accountBalance={accountBalance}
+          closeDialog={closeEditDialog}
         />
       </Dialog>
     </>
