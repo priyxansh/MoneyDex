@@ -5,7 +5,11 @@ import { z } from "zod";
 import { categoryFormSchema } from "@/lib/zod-schemas/categoryFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
-import SaveCategoryButton from "./SaveCategoryButton";
+import { updateCategory } from "@/actions/category-actions";
+import { useToast } from "../ui/use-toast";
+import { DialogClose } from "../ui/dialog";
+import { Button } from "../ui/button";
+import SaveButton from "../SaveButton";
 
 import {
   Form,
@@ -23,10 +27,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { updateCategory } from "@/actions/category-actions";
-import { useToast } from "../ui/use-toast";
-import { DialogClose } from "../ui/dialog";
-import { Button } from "../ui/button";
 
 type EditCategoryFormProps = {
   id: string;
@@ -123,7 +123,7 @@ const EditCategoryForm = ({
           <DialogClose asChild>
             <Button variant={"secondary"}>Cancel</Button>
           </DialogClose>
-          <SaveCategoryButton isSubmitting={isSubmitting} isDirty={isDirty} />
+          <SaveButton isSubmitting={isSubmitting} isDirty={isDirty} />
         </div>
       </form>
     </Form>

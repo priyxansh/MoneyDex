@@ -1,16 +1,13 @@
 "use client";
 
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 
-type SaveCategoryButtonProps = {
+type SaveButtonProps = {
   isSubmitting: boolean;
   isDirty: boolean;
 };
 
-const SaveCategoryButton = ({
-  isSubmitting,
-  isDirty,
-}: SaveCategoryButtonProps) => {
+const SaveButton = ({ isSubmitting, isDirty }: SaveButtonProps) => {
   return (
     <Button type="submit" variant="default" disabled={isSubmitting || !isDirty}>
       {isSubmitting ? "Saving..." : "Save"}
@@ -18,4 +15,4 @@ const SaveCategoryButton = ({
   );
 };
 
-export default SaveCategoryButton;
+export default SaveButton;
