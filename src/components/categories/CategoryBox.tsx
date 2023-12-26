@@ -1,10 +1,12 @@
+import { Button } from "../ui/button";
+import DeleteCategoryMenuItem from "./DeleteCategoryMenuItem";
+
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { Button } from "../ui/button";
 
 type CategoryBoxProps = {
   name: string;
@@ -12,7 +14,7 @@ type CategoryBoxProps = {
   id: string;
 };
 
-const CategoryBox = ({ name, type }: CategoryBoxProps) => {
+const CategoryBox = ({ name, type, id }: CategoryBoxProps) => {
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -22,7 +24,7 @@ const CategoryBox = ({ name, type }: CategoryBoxProps) => {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem>Edit</ContextMenuItem>
-        <ContextMenuItem>Delete</ContextMenuItem>
+        <DeleteCategoryMenuItem id={id} />
       </ContextMenuContent>
     </ContextMenu>
   );
