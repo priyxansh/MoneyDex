@@ -1,10 +1,6 @@
-"use client";
-
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import Link from "next/link";
-import DeleteAccountDialogContent from "./DeleteAccountDialogContent";
 
 import {
   DropdownMenu,
@@ -15,21 +11,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { DialogTrigger } from "@/components/ui/dialog";
+import DeleteAccountDialog from "./DeleteAccountDialog";
 
 type RowActionMenuProps = {
   accountId: string;
 };
 
 const RowActionMenu = ({ accountId }: RowActionMenuProps) => {
-  const [open, setOpen] = useState(false);
-
-  const closeDialog = () => {
-    setOpen(false);
-  };
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <DeleteAccountDialog accountId={accountId}>
       <DropdownMenu>
         <div className="w-full flex justify-end">
           <DropdownMenuTrigger asChild>
@@ -55,11 +46,7 @@ const RowActionMenu = ({ accountId }: RowActionMenuProps) => {
           </DialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DeleteAccountDialogContent
-        accountId={accountId}
-        closeDialog={closeDialog}
-      />
-    </Dialog>
+    </DeleteAccountDialog>
   );
 };
 
