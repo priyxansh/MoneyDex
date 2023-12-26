@@ -6,6 +6,39 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+export const createCategory = async (
+  name: string,
+  type: "INCOME" | "EXPENSE"
+) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  try {
+    await prisma.transactionCategory.create({
+      data: {
+        name: name,
+        type: type,
+        user: {
+          connect: {
+            id: session.user.id,
+          },
+        },
+      },
+    });
+
+    revalidatePath("/categories");
+  } catch (error) {
+    return {
+      error: {
+        message: "Something went wrong",
+      },
+    };
+  }
+};
+
 export const deleteCategory = async (id: string) => {
   const session = await getServerSession(authOptions);
 
