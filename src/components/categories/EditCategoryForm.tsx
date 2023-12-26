@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { updateCategory } from "@/actions/category-actions";
 import { useToast } from "../ui/use-toast";
-import { DialogClose } from "../ui/dialog";
 import { Button } from "../ui/button";
 import SaveButton from "../SaveButton";
 
@@ -120,9 +119,9 @@ const EditCategoryForm = ({
           />
         </div>
         <div className="w-full flex gap-4 mt-4 justify-end">
-          <DialogClose asChild>
-            <Button variant={"secondary"}>Cancel</Button>
-          </DialogClose>
+          <Button variant={"secondary"} onClick={() => closeDialog()}>
+            Cancel
+          </Button>
           <SaveButton isSubmitting={isSubmitting} isDirty={isDirty} />
         </div>
       </form>
