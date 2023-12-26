@@ -22,14 +22,14 @@ type RowActionMenuProps = {
 };
 
 const RowActionMenu = ({ accountId }: RowActionMenuProps) => {
-  const [open, setOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const closeDialog = () => {
-    setOpen(false);
+  const closeDeleteDialog = () => {
+    setDeleteDialogOpen(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <>
       <DropdownMenu>
         <div className="w-full flex justify-end">
           <DropdownMenuTrigger asChild>
@@ -50,16 +50,18 @@ const RowActionMenu = ({ accountId }: RowActionMenuProps) => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DialogTrigger asChild>
-            <DropdownMenuItem>Delete Account</DropdownMenuItem>
-          </DialogTrigger>
+          <DropdownMenuItem onClick={() => setDeleteDialogOpen(true)}>
+            Delete Account
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DeleteAccountDialogContent
-        accountId={accountId}
-        closeDialog={closeDialog}
-      />
-    </Dialog>
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DeleteAccountDialogContent
+          accountId={accountId}
+          closeDialog={closeDeleteDialog}
+        />
+      </Dialog>
+    </>
   );
 };
 
