@@ -39,6 +39,41 @@ export const createCategory = async (
   }
 };
 
+export const updateCategory = async (
+  id: string,
+  name: string,
+  type: "INCOME" | "EXPENSE"
+) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  try {
+    await prisma.transactionCategory.update({
+      where: {
+        user: {
+          id: session.user.id,
+        },
+        id: id,
+      },
+      data: {
+        name: name,
+        type: type,
+      },
+    });
+
+    revalidatePath("/categories");
+  } catch (error) {
+    return {
+      error: {
+        message: "Something went wrong",
+      },
+    };
+  }
+};
+
 export const deleteCategory = async (id: string) => {
   const session = await getServerSession(authOptions);
 

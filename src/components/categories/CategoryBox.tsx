@@ -1,5 +1,7 @@
 import { Button } from "../ui/button";
 import DeleteCategoryMenuItem from "./DeleteCategoryMenuItem";
+import EditCategoryDialog from "./EditCategoryDialog";
+import { DialogTrigger } from "../ui/dialog";
 
 import {
   ContextMenu,
@@ -16,17 +18,24 @@ type CategoryBoxProps = {
 
 const CategoryBox = ({ name, type, id }: CategoryBoxProps) => {
   return (
-    <ContextMenu>
-      <ContextMenuTrigger asChild>
-        <Button asChild variant={type === "INCOME" ? "default" : "destructive"}>
-          <div>{name}</div>
-        </Button>
-      </ContextMenuTrigger>
-      <ContextMenuContent>
-        <ContextMenuItem>Edit</ContextMenuItem>
-        <DeleteCategoryMenuItem id={id} />
-      </ContextMenuContent>
-    </ContextMenu>
+    <EditCategoryDialog id={id} name={name} type={type}>
+      <ContextMenu>
+        <ContextMenuTrigger asChild>
+          <Button
+            asChild
+            variant={type === "INCOME" ? "default" : "destructive"}
+          >
+            <div>{name}</div>
+          </Button>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <DialogTrigger asChild>
+            <ContextMenuItem>Edit</ContextMenuItem>
+          </DialogTrigger>
+          <DeleteCategoryMenuItem id={id} />
+        </ContextMenuContent>
+      </ContextMenu>
+    </EditCategoryDialog>
   );
 };
 
