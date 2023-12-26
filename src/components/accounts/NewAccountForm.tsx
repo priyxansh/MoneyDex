@@ -61,7 +61,7 @@ const NewAccountForm = ({}: NewAccountFormProps) => {
               <FormItem className="w-full max-w-[350px]">
                 <FormLabel>Account Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Account Name" {...field} />
+                  <Input placeholder="Account Name" {...field} autoComplete="off" />
                 </FormControl>
                 <FormDescription>
                   This is your account&apos;s display name.
@@ -77,7 +77,7 @@ const NewAccountForm = ({}: NewAccountFormProps) => {
               <FormItem className="w-full max-w-[350px]">
                 <FormLabel>Account Balance</FormLabel>
                 <FormControl>
-                  <Input placeholder="0" {...field} />
+                  <Input placeholder="0" {...field} autoComplete="off"/>
                 </FormControl>
                 <FormDescription>
                   This is your account&apos;s initial balance.
