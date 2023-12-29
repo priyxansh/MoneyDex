@@ -98,5 +98,4 @@ model Transaction {
   createdAt     DateTime             @default(now())
   updatedAt     DateTime             @updatedAt
   date          DateTime             @default(now()) @db.Date
-  time          DateTime             @default(now()) @db.Time
 }
