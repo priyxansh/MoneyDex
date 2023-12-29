@@ -97,5 +97,4 @@ model Transaction {
   amount        Int
   createdAt     DateTime             @default(now())
   updatedAt     DateTime             @updatedAt
-  date          DateTime             @default(now()) @db.Date
 }
