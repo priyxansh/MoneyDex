@@ -27,7 +27,7 @@ const EditCategoryDialogContent = ({
       <DialogHeader>
         <DialogTitle>Edit Category</DialogTitle>
         <DialogDescription>
-          Edit Transaction Category here. Click save when you're done.
+          Edit Transaction Category here. Click save when you&apos;re done.
         </DialogDescription>
       </DialogHeader>
       <EditCategoryForm id={id} name={name} type={type} closeDialog={closeDialog} />

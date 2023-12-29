@@ -28,7 +28,7 @@ const EditAccountDialogContent = ({
         <DialogTitle>Edit Account</DialogTitle>
         <DialogDescription>
           Edit <span className="font-semibold text-primary">{accountName}</span>{" "}
-          Account here. Click save when you're done.
+          Account here. Click save when you&apos;re done.
         </DialogDescription>
       </DialogHeader>
       <EditAccountForm
