@@ -3,7 +3,7 @@ import prisma from "../prisma";
 export const getUserCategories = async (
   userId: string,
   type: "ALL" | "INCOME" | "EXPENSE",
-  searchQuery: string
+  searchQuery?: string
 ) => {
   const userCategories = await prisma.transactionCategory.findMany({
     where: {
