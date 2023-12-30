@@ -94,7 +94,7 @@ model Transaction {
   fromAccount   Account              @relation("TransactionFromAccount", fields: [fromAccountId], references: [id])
   toAccountId   String?
   toAccount     Account?             @relation("TransactionToAccount", fields: [toAccountId], references: [id])
-  amount        Int
+  amount        Float
   createdAt     DateTime             @default(now())
   updatedAt     DateTime             @updatedAt
 }
