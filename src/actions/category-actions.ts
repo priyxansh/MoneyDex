@@ -2,13 +2,14 @@
 
 import { authOptions } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
+import { categoryFormSchema } from "@/lib/zod-schemas/categoryFormSchema";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
 export const createCategory = async (
-  name: string,
-  type: "INCOME" | "EXPENSE"
+  data: z.infer<typeof categoryFormSchema>
 ) => {
   const session = await getServerSession(authOptions);
 
@@ -16,7 +17,11 @@ export const createCategory = async (
     return redirect("/auth/signin");
   }
 
+  const { categoryName: name, categoryType: type } = data;
+
   try {
+    categoryFormSchema.parse(data);
+
     await prisma.transactionCategory.create({
       data: {
         name: name,
@@ -41,8 +46,7 @@ export const createCategory = async (
 
 export const updateCategory = async (
   id: string,
-  name: string,
-  type: "INCOME" | "EXPENSE"
+  data: z.infer<typeof categoryFormSchema>
 ) => {
   const session = await getServerSession(authOptions);
 
@@ -50,7 +54,11 @@ export const updateCategory = async (
     return redirect("/auth/signin");
   }
 
+  const { categoryName: name, categoryType: type } = data;
+
   try {
+    categoryFormSchema.parse(data);
+
     await prisma.transactionCategory.update({
       where: {
         user: {

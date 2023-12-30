@@ -53,11 +53,7 @@ const EditCategoryForm = ({
   const { isSubmitting, isDirty } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof categoryFormSchema>) => {
-    const result = await updateCategory(
-      id,
-      data.categoryName,
-      data.categoryType
-    );
+    const result = await updateCategory(id, data);
 
     if (result?.error) {
       toast({

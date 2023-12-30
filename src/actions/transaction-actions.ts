@@ -21,6 +21,8 @@ export const createTransaction = async (
     data;
 
   try {
+    transactionFormSchema.parse(data);
+
     const fromAccount = await prisma.account.findUnique({
       where: {
         id: fromAccountId,

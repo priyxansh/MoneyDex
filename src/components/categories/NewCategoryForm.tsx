@@ -42,7 +42,7 @@ const NewCategoryForm = ({}: NewCategoryFormProps) => {
   });
 
   const onSubmit = async (data: z.infer<typeof categoryFormSchema>) => {
-    const result = await createCategory(data.categoryName, data.categoryType);
+    const result = await createCategory(data);
 
     if (result?.error) {
       toast({

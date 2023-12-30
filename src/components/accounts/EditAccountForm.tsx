@@ -45,11 +45,7 @@ const EditAccountForm = ({
   const { isSubmitting, isDirty } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof accountFormSchema>) => {
-    const result = await updateAccount(
-      accountId,
-      data.accountName,
-      data.balance
-    );
+    const result = await updateAccount(accountId, data);
 
     if (result?.error) {
       toast({

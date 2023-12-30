@@ -11,15 +11,17 @@ import { revalidatePath } from "next/cache";
 export const createAccount = async (
   data: z.infer<typeof accountFormSchema>
 ) => {
-  const { accountName, balance } = data;
-
   const session = await getServerSession(authOptions);
 
   if (!session) {
     return redirect("/auth/signin");
   }
 
+  const { accountName, balance } = data;
+
   try {
+    accountFormSchema.parse(data);
+
     await prisma.account.create({
       data: {
         name: accountName,
@@ -44,8 +46,7 @@ export const createAccount = async (
 
 export const updateAccount = async (
   id: string,
-  name: string,
-  balance: number
+  data: z.infer<typeof accountFormSchema>
 ) => {
   const session = await getServerSession(authOptions);
 
@@ -53,7 +54,11 @@ export const updateAccount = async (
     return redirect("/auth/signin");
   }
 
+  const { accountName: name, balance } = data;
+
   try {
+    accountFormSchema.parse(data);
+
     await prisma.account.update({
       where: {
         id: id,
