@@ -35,10 +35,11 @@ export const createAccount = async (
     });
 
     revalidatePath("/accounts");
-  } catch (error) {
+  } catch (error: any) {
     return {
       error: {
-        message: "Something went wrong",
+        message:
+          error.name === "CustomError" ? error.message : "Something went wrong",
       },
     };
   }
@@ -73,10 +74,11 @@ export const updateAccount = async (
     });
 
     revalidatePath("/accounts");
-  } catch (error) {
+  } catch (error: any) {
     return {
       error: {
-        message: "Something went wrong",
+        message:
+          error.name === "CustomError" ? error.message : "Something went wrong",
       },
     };
   }
@@ -99,11 +101,9 @@ export const deleteAccount = async (id: string) => {
     });
 
     if (accountCount === 1) {
-      return {
-        error: {
-          message: "You cannot delete your only account.",
-        },
-      };
+      const error = new Error("Cannot delete last account.");
+      error.name = "CustomError";
+      throw error;
     }
 
     const deleteTransactionsPromise = prisma.transaction.deleteMany({
@@ -132,10 +132,11 @@ export const deleteAccount = async (id: string) => {
     ]);
 
     revalidatePath("/accounts");
-  } catch (error) {
+  } catch (error: any) {
     return {
       error: {
-        message: "Something went wrong",
+        message:
+          error.name === "CustomError" ? error.message : "Something went wrong",
       },
     };
   }

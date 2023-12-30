@@ -35,10 +35,11 @@ export const createCategory = async (
     });
 
     revalidatePath("/categories");
-  } catch (error) {
+  } catch (error: any) {
     return {
       error: {
-        message: "Something went wrong",
+        message:
+          error.name === "CustomError" ? error.message : "Something went wrong",
       },
     };
   }
@@ -73,10 +74,11 @@ export const updateCategory = async (
     });
 
     revalidatePath("/categories");
-  } catch (error) {
+  } catch (error: any) {
     return {
       error: {
-        message: "Something went wrong",
+        message:
+          error.name === "CustomError" ? error.message : "Something went wrong",
       },
     };
   }
@@ -100,10 +102,11 @@ export const deleteCategory = async (id: string) => {
     });
 
     revalidatePath("/categories");
-  } catch (error) {
+  } catch (error: any) {
     return {
       error: {
-        message: "Something went wrong",
+        message:
+          error.name === "CustomError" ? error.message : "Something went wrong",
       },
     };
   }
