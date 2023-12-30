@@ -108,9 +108,18 @@ export const deleteAccount = async (id: string) => {
 
     const deleteTransactionsPromise = prisma.transaction.deleteMany({
       where: {
-        fromAccount: {
-          id: id,
-        },
+        OR: [
+          {
+            fromAccount: {
+              id: id,
+            },
+          },
+          {
+            toAccount: {
+              id: id,
+            },
+          },
+        ],
         user: {
           id: session.user.id,
         },
