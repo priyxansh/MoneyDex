@@ -8,7 +8,7 @@ import { Input } from "../ui/input";
 import CreateCategoryButton from "./CreateCategoryButton";
 import { useRouter } from "next/navigation";
 import { createCategory } from "@/actions/category-actions";
-import { useToast } from "../ui/use-toast";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -30,7 +30,6 @@ import {
 type NewCategoryFormProps = {};
 
 const NewCategoryForm = ({}: NewCategoryFormProps) => {
-  const { toast } = useToast();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof categoryFormSchema>>({
@@ -44,14 +43,12 @@ const NewCategoryForm = ({}: NewCategoryFormProps) => {
   const onSubmit = async (data: z.infer<typeof categoryFormSchema>) => {
     const result = await createCategory(data);
 
-    if (result?.error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: result.error.message,
-      });
+    if (!result.success) {
+      toast.error(result.message);
       return;
     }
+
+    toast.success(result.message);
 
     router.push("/categories");
   };

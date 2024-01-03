@@ -6,9 +6,10 @@ import { categoryFormSchema } from "@/lib/zod-schemas/categoryFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { updateCategory } from "@/actions/category-actions";
-import { useToast } from "../ui/use-toast";
 import { Button } from "../ui/button";
 import SaveButton from "../SaveButton";
+import { getSubmitOnEnter } from "@/lib/utils/getSubmitOnEnter";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -26,7 +27,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { getSubmitOnEnter } from "@/lib/utils/getSubmitOnEnter";
 
 type EditCategoryFormProps = {
   id: string;
@@ -41,8 +41,6 @@ const EditCategoryForm = ({
   type,
   closeDialog,
 }: EditCategoryFormProps) => {
-  const { toast } = useToast();
-
   const form = useForm<z.infer<typeof categoryFormSchema>>({
     resolver: zodResolver(categoryFormSchema),
     defaultValues: {
@@ -60,14 +58,12 @@ const EditCategoryForm = ({
 
     const result = await updateCategory(id, data);
 
-    if (result?.error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: result.error.message,
-      });
+    if (!result.success) {
+      toast.error(result.message);
       return;
     }
+
+    toast.success(result.message);
 
     closeDialog();
   };

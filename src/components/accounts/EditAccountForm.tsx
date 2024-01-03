@@ -7,9 +7,9 @@ import { z } from "zod";
 import { Input } from "../ui/input";
 import SaveButton from "../SaveButton";
 import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
 import { updateAccount } from "@/actions/account-actions";
 import { getSubmitOnEnter } from "@/lib/utils/getSubmitOnEnter";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -33,8 +33,6 @@ const EditAccountForm = ({
   accountBalance,
   closeDialog,
 }: EditAccountFormProps) => {
-  const { toast } = useToast();
-
   const form = useForm<z.infer<typeof accountFormSchema>>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
@@ -52,14 +50,12 @@ const EditAccountForm = ({
 
     const result = await updateAccount(accountId, data);
 
-    if (result?.error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: result.error.message,
-      });
+    if (!result.success) {
+      toast.error(result.message);
       return;
     }
+
+    toast.success(result.message);
 
     closeDialog();
   };

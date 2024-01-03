@@ -2,8 +2,8 @@
 
 import { deleteAccount } from "@/actions/account-actions";
 import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type DeleteAccountButtonProps = {
   accountId: string;
@@ -14,8 +14,6 @@ const DeleteAccountButton = ({
   accountId,
   closeDialog,
 }: DeleteAccountButtonProps) => {
-  const { toast } = useToast();
-
   const [pending, setPending] = useState(false);
 
   const onClick = async () => {
@@ -23,16 +21,14 @@ const DeleteAccountButton = ({
 
     const result = await deleteAccount(accountId);
 
-    if (result?.error) {
+    if (!result.success) {
+      toast.error(result.message);
       setPending(false);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: result.error.message,
-      });
       return;
     }
 
+    toast.success(result.message);
+    setPending(false);
     closeDialog();
   };
 

@@ -2,26 +2,22 @@
 
 import { deleteCategory } from "@/actions/category-actions";
 import { ContextMenuItem } from "../ui/context-menu";
-import { useToast } from "../ui/use-toast";
+import { toast } from "sonner";
 
 type DeleteCategoryMenuItemProps = {
   id: string;
 };
 
 const DeleteCategoryMenuItem = ({ id }: DeleteCategoryMenuItemProps) => {
-  const { toast } = useToast();
-
   const onClick = async () => {
     const result = await deleteCategory(id);
 
-    if (result?.error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: result.error.message,
-      });
+    if (!result.success) {
+      toast.error(result.message);
       return;
     }
+
+    toast.success(result.message);
   };
 
   return <ContextMenuItem onClick={onClick}>Delete</ContextMenuItem>;

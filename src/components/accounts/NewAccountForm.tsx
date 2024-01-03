@@ -4,6 +4,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
+import { accountFormSchema as formSchema } from "@/lib/zod-schemas/accountFormSchema";
+import { createAccount } from "@/actions/account-actions";
+import CreateAccountButton from "./CreateAccountButton";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -15,16 +20,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { accountFormSchema as formSchema } from "@/lib/zod-schemas/accountFormSchema";
-import { createAccount } from "@/actions/account-actions";
-import CreateAccountButton from "./CreateAccountButton";
-import { useRouter } from "next/navigation";
-import { useToast } from "../ui/use-toast";
-
 type NewAccountFormProps = {};
 
 const NewAccountForm = ({}: NewAccountFormProps) => {
-  const { toast } = useToast();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,14 +36,12 @@ const NewAccountForm = ({}: NewAccountFormProps) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const result = await createAccount(data);
 
-    if (result?.error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: result.error.message,
-      });
+    if (!result.success) {
+      toast.error(result.message);
       return;
     }
+
+    toast.success(result.message);
 
     router.push("/accounts");
   };
@@ -61,7 +57,11 @@ const NewAccountForm = ({}: NewAccountFormProps) => {
               <FormItem className="w-full max-w-[350px]">
                 <FormLabel>Account Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Account Name" {...field} autoComplete="off" />
+                  <Input
+                    placeholder="Account Name"
+                    {...field}
+                    autoComplete="off"
+                  />
                 </FormControl>
                 <FormDescription>
                   This is your account&apos;s display name.
@@ -77,7 +77,7 @@ const NewAccountForm = ({}: NewAccountFormProps) => {
               <FormItem className="w-full max-w-[350px]">
                 <FormLabel>Account Balance</FormLabel>
                 <FormControl>
-                  <Input placeholder="0" {...field} autoComplete="off"/>
+                  <Input placeholder="0" {...field} autoComplete="off" />
                 </FormControl>
                 <FormDescription>
                   This is your account&apos;s initial balance.

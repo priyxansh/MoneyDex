@@ -1,4 +1,4 @@
-// Todo use sonner for toasts add pagination to transactions
+// Add pagination to transactions
 
 "use client";
 
@@ -10,8 +10,8 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import SubmitButton from "../SubmitButton";
 import { createTransaction } from "@/actions/transaction-actions";
-import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -52,20 +52,17 @@ const NewTransactionForm = ({
     },
   });
 
-  const { toast } = useToast();
   const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof transactionFormSchema>) => {
     const result = await createTransaction(data);
 
-    if (result?.error) {
-      toast({
-        title: "Error",
-        variant: "destructive",
-        description: result.error.message,
-      });
+    if (!result.success) {
+      toast.error(result.message);
       return;
     }
+
+    toast.success(result.message);
 
     router.push("/transactions");
   };

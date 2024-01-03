@@ -2,31 +2,22 @@
 
 import { undoTransaction } from "@/actions/transaction-actions";
 import { ContextMenuItem } from "../ui/context-menu";
-import { useToast } from "../ui/use-toast";
+import { toast } from "sonner";
 
 type UndoTransactionMenuItemProps = {
   id: string;
 };
 
 const UndoTransactionMenuItem = ({ id }: UndoTransactionMenuItemProps) => {
-  const { toast } = useToast();
-
   const onClick = async () => {
     const result = await undoTransaction(id);
 
-    if (result?.error) {
-      toast({
-        title: "Error",
-        variant: "destructive",
-        description: result.error.message,
-      });
+    if (!result.success) {
+      toast.error(result.message);
       return;
     }
 
-    toast({
-      title: "Success",
-      description: "Transaction has been undone.",
-    });
+    toast.success(result.message);
   };
 
   return <ContextMenuItem onClick={onClick}>Undo Transaction</ContextMenuItem>;
