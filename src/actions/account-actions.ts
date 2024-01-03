@@ -85,6 +85,7 @@ export const updateAccount = async (
 };
 
 export const deleteAccount = async (id: string) => {
+  // TODO: Use undoTransaction to undo all transactions associated with this account
   const session = await getServerSession(authOptions);
 
   if (!session) {

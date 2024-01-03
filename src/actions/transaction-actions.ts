@@ -194,3 +194,163 @@ export const createTransaction = async (
     };
   }
 };
+
+export const undoTransaction = async (id: string) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  try {
+    const transaction = await prisma.transaction.findUnique({
+      where: {
+        id: id,
+        user: {
+          id: session.user.id,
+        },
+      },
+      select: {
+        id: true,
+        amount: true,
+        type: true,
+        fromAccount: {
+          select: {
+            id: true,
+            balance: true,
+          },
+        },
+        toAccount: {
+          select: {
+            id: true,
+            balance: true,
+          },
+        },
+      },
+    });
+
+    if (!transaction) {
+      const error = new Error("Transaction not found.");
+      error.name = "CustomError";
+      throw error;
+    }
+
+    if (transaction.type === "TRANSFER") {
+      if (!transaction.toAccount) {
+        const error = new Error("Account not found.");
+        error.name = "CustomError";
+        throw error;
+      }
+
+      if (transaction.toAccount.balance < transaction.amount) {
+        const error = new Error(
+          "Insufficient funds in target account to undo transfer."
+        );
+        error.name = "CustomError";
+        throw error;
+      }
+
+      const fromUpdatePromise = prisma.account.update({
+        where: {
+          id: transaction.fromAccount.id,
+          user: {
+            id: session.user.id,
+          },
+        },
+        data: {
+          balance: {
+            increment: transaction.amount,
+          },
+        },
+      });
+
+      const toUpdatePromise = prisma.account.update({
+        where: {
+          id: transaction.toAccount.id,
+          user: {
+            id: session.user.id,
+          },
+        },
+        data: {
+          balance: {
+            decrement: transaction.amount,
+          },
+        },
+      });
+
+      const deleteTransactionPromise = prisma.transaction.delete({
+        where: {
+          id: transaction.id,
+          user: {
+            id: session.user.id,
+          },
+        },
+      });
+
+      await prisma.$transaction([
+        fromUpdatePromise,
+        toUpdatePromise,
+        deleteTransactionPromise,
+      ]);
+
+      revalidatePath("/transactions");
+      revalidatePath("/accounts");
+    } else {
+      const balance: {
+        increment?: number;
+        decrement?: number;
+      } = {};
+
+      if (transaction.type === "INCOME") {
+        if (transaction.fromAccount.balance < transaction.amount) {
+          const error = new Error(
+            "Insufficient funds in account to undo income."
+          );
+          error.name = "CustomError";
+          throw error;
+        }
+
+        balance["decrement"] = transaction.amount;
+      } else if (transaction.type === "EXPENSE") {
+        balance["increment"] = transaction.amount;
+      }
+
+      const balanceUpdatePromise = prisma.account.update({
+        where: {
+          id: transaction.fromAccount.id,
+          user: {
+            id: session.user.id,
+          },
+        },
+        data: {
+          balance: balance,
+        },
+      });
+
+      const deleteTransactionPromise = prisma.transaction.delete({
+        where: {
+          id: transaction.id,
+          user: {
+            id: session.user.id,
+          },
+        },
+      });
+
+      await prisma.$transaction([
+        balanceUpdatePromise,
+        deleteTransactionPromise,
+      ]);
+
+      revalidatePath("/transactions");
+      revalidatePath("/accounts");
+    }
+  } catch (error: any) {
+    console.log(error);
+    return {
+      error: {
+        message:
+          error.name === "CustomError" ? error.message : "Something went wrong",
+      },
+    };
+  }
+};
