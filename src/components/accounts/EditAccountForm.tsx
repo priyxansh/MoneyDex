@@ -5,6 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "../ui/input";
+import SaveButton from "../SaveButton";
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
+import { updateAccount } from "@/actions/account-actions";
+import { getSubmitOnEnter } from "@/lib/utils/getSubmitOnEnter";
 
 import {
   Form,
@@ -14,10 +19,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import SaveButton from "../SaveButton";
-import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
-import { updateAccount } from "@/actions/account-actions";
 
 type EditAccountFormProps = {
   accountId: string;
@@ -45,6 +46,10 @@ const EditAccountForm = ({
   const { isSubmitting, isDirty } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof accountFormSchema>) => {
+    if (!isDirty) {
+      return;
+    }
+
     const result = await updateAccount(accountId, data);
 
     if (result?.error) {
@@ -61,7 +66,11 @@ const EditAccountForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-5">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mt-5"
+        onKeyDown={getSubmitOnEnter(form, onSubmit)}
+      >
         <div className="flex flex-col gap-4">
           <FormField
             control={form.control}

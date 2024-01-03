@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { getSubmitOnEnter } from "@/lib/utils/getSubmitOnEnter";
 
 type EditCategoryFormProps = {
   id: string;
@@ -53,6 +54,10 @@ const EditCategoryForm = ({
   const { isSubmitting, isDirty } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof categoryFormSchema>) => {
+    if (!isDirty) {
+      return;
+    }
+
     const result = await updateCategory(id, data);
 
     if (result?.error) {
@@ -69,7 +74,11 @@ const EditCategoryForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-5">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mt-5"
+        onKeyDown={getSubmitOnEnter(form, onSubmit)}
+      >
         <div className="flex flex-col items-center gap-4">
           <FormField
             control={form.control}
