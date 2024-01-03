@@ -22,7 +22,7 @@ export const createAccount = async (
   try {
     accountFormSchema.parse(data);
 
-    await prisma.account.create({
+    const createdAccount = await prisma.account.create({
       data: {
         name: accountName,
         balance: balance,
@@ -35,12 +35,18 @@ export const createAccount = async (
     });
 
     revalidatePath("/accounts");
+
+    return {
+      success: true,
+      message: `Account ${createdAccount.name} created successfully.`,
+    };
   } catch (error: any) {
     return {
-      error: {
-        message:
-          error.name === "CustomError" ? error.message : "Something went wrong",
-      },
+      success: false,
+      message:
+        error.name === "CustomError"
+          ? error.message
+          : "An error occurred while creating the account.",
     };
   }
 };
@@ -60,7 +66,7 @@ export const updateAccount = async (
   try {
     accountFormSchema.parse(data);
 
-    await prisma.account.update({
+    const updatedAccount = await prisma.account.update({
       where: {
         id: id,
         user: {
@@ -74,12 +80,20 @@ export const updateAccount = async (
     });
 
     revalidatePath("/accounts");
+
+    // TODO: Handle user currency
+
+    return {
+      success: true,
+      message: `Account ${updatedAccount.name} updated successfully. Balance: $${updatedAccount.balance}.`,
+    };
   } catch (error: any) {
     return {
-      error: {
-        message:
-          error.name === "CustomError" ? error.message : "Something went wrong",
-      },
+      success: false,
+      message:
+        error.name === "CustomError"
+          ? error.message
+          : "An error occurred while updating the account.",
     };
   }
 };
@@ -135,18 +149,24 @@ export const deleteAccount = async (id: string) => {
       },
     });
 
-    await prisma.$transaction([
+    const [_, deletedAccount] = await prisma.$transaction([
       deleteTransactionsPromise,
       deleteAccountPromise,
     ]);
 
     revalidatePath("/accounts");
+
+    return {
+      success: true,
+      message: `Account ${deletedAccount.name} deleted successfully.`,
+    };
   } catch (error: any) {
     return {
-      error: {
-        message:
-          error.name === "CustomError" ? error.message : "Something went wrong",
-      },
+      success: false,
+      message:
+        error.name === "CustomError"
+          ? error.message
+          : "An error occurred while deleting the account.",
     };
   }
 };

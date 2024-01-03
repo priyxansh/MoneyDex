@@ -184,13 +184,19 @@ export const createTransaction = async (
 
     revalidatePath("/transactions");
     revalidatePath("/accounts");
+
+    return {
+      success: true,
+      message: "Transaction logged successfully.",
+    };
   } catch (error: any) {
     console.log(error);
     return {
-      error: {
-        message:
-          error.name === "CustomError" ? error.message : "Something went wrong",
-      },
+      success: false,
+      message:
+        error.name === "CustomError"
+          ? error.message
+          : "An error occurred while logging the transaction.",
     };
   }
 };
@@ -292,9 +298,6 @@ export const undoTransaction = async (id: string) => {
         toUpdatePromise,
         deleteTransactionPromise,
       ]);
-
-      revalidatePath("/transactions");
-      revalidatePath("/accounts");
     } else {
       const balance: {
         increment?: number;
@@ -340,17 +343,23 @@ export const undoTransaction = async (id: string) => {
         balanceUpdatePromise,
         deleteTransactionPromise,
       ]);
-
-      revalidatePath("/transactions");
-      revalidatePath("/accounts");
     }
+
+    revalidatePath("/transactions");
+    revalidatePath("/accounts");
+
+    return {
+      success: true,
+      message: "Transaction undone successfully.",
+    };
   } catch (error: any) {
     console.log(error);
     return {
-      error: {
-        message:
-          error.name === "CustomError" ? error.message : "Something went wrong",
-      },
+      success: false,
+      message:
+        error.name === "CustomError"
+          ? error.message
+          : "An error occurred while undoing the transaction.",
     };
   }
 };

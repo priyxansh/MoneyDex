@@ -22,7 +22,7 @@ export const createCategory = async (
   try {
     categoryFormSchema.parse(data);
 
-    await prisma.transactionCategory.create({
+    const createdCategory = await prisma.transactionCategory.create({
       data: {
         name: name,
         type: type,
@@ -35,12 +35,16 @@ export const createCategory = async (
     });
 
     revalidatePath("/categories");
+
+    return {
+      success: true,
+      message: `Category ${createdCategory.name} created successfully.`,
+    };
   } catch (error: any) {
     return {
-      error: {
-        message:
-          error.name === "CustomError" ? error.message : "Something went wrong",
-      },
+      success: false,
+      message:
+        error.name === "CustomError" ? error.message : "Something went wrong",
     };
   }
 };
@@ -60,7 +64,7 @@ export const updateCategory = async (
   try {
     categoryFormSchema.parse(data);
 
-    await prisma.transactionCategory.update({
+    const updatedCategory = await prisma.transactionCategory.update({
       where: {
         user: {
           id: session.user.id,
@@ -74,12 +78,16 @@ export const updateCategory = async (
     });
 
     revalidatePath("/categories");
+
+    return {
+      success: true,
+      message: `Category ${updatedCategory.name} updated successfully.`,
+    };
   } catch (error: any) {
     return {
-      error: {
-        message:
-          error.name === "CustomError" ? error.message : "Something went wrong",
-      },
+      success: false,
+      message:
+        error.name === "CustomError" ? error.message : "Something went wrong",
     };
   }
 };
@@ -92,7 +100,7 @@ export const deleteCategory = async (id: string) => {
   }
 
   try {
-    await prisma.transactionCategory.delete({
+    const deletedCategory = await prisma.transactionCategory.delete({
       where: {
         user: {
           id: session.user.id,
@@ -102,12 +110,16 @@ export const deleteCategory = async (id: string) => {
     });
 
     revalidatePath("/categories");
+
+    return {
+      success: true,
+      message: `Category ${deletedCategory.name} deleted successfully.`,
+    };
   } catch (error: any) {
     return {
-      error: {
-        message:
-          error.name === "CustomError" ? error.message : "Something went wrong",
-      },
+      success: false,
+      message:
+        error.name === "CustomError" ? error.message : "Something went wrong",
     };
   }
 };
