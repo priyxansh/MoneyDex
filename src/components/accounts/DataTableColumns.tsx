@@ -28,17 +28,7 @@ export const columns: ColumnDef<Account>[] = [
       }).format(balance);
 
       return (
-        <div
-          className={`text-right font-medium ${
-            balance === 0
-              ? ""
-              : balance > 0
-              ? "text-primary"
-              : "text-destructive"
-          }`}
-        >
-          {formatted}
-        </div>
+        <div className={`text-right text-primary font-medium`}>{formatted}</div>
       );
     },
   },
