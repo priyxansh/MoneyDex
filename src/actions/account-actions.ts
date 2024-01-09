@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { accountFormSchema } from "@/lib/zod-schemas/accountFormSchema";
+import { newAccountFormSchema, editAccountFormSchema } from "@/lib/zod-schemas/accountFormSchema";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
@@ -9,7 +9,7 @@ import { authOptions } from "@/lib/next-auth";
 import { revalidatePath } from "next/cache";
 
 export const createAccount = async (
-  data: z.infer<typeof accountFormSchema>
+  data: z.infer<typeof newAccountFormSchema>
 ) => {
   const session = await getServerSession(authOptions);
 
@@ -20,7 +20,7 @@ export const createAccount = async (
   const { accountName, balance } = data;
 
   try {
-    accountFormSchema.parse(data);
+    newAccountFormSchema.parse(data);
 
     const createdAccount = await prisma.account.create({
       data: {
@@ -53,7 +53,7 @@ export const createAccount = async (
 
 export const updateAccount = async (
   id: string,
-  data: z.infer<typeof accountFormSchema>
+  data: z.infer<typeof editAccountFormSchema>
 ) => {
   const session = await getServerSession(authOptions);
 
@@ -64,7 +64,7 @@ export const updateAccount = async (
   const { accountName: name, balance } = data;
 
   try {
-    accountFormSchema.parse(data);
+    editAccountFormSchema.parse(data);
 
     const updatedAccount = await prisma.account.update({
       where: {
