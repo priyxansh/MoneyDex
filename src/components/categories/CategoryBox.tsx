@@ -10,9 +10,11 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
+import { TransactionCategoryType } from "@/types/prisma";
+
 type CategoryBoxProps = {
   name: string;
-  type: "INCOME" | "EXPENSE";
+  type: TransactionCategoryType;
   id: string;
 };
 

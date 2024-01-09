@@ -4,8 +4,10 @@ import { getUserCategories } from "@/lib/utils/getUserCategories";
 
 import CategoryBox from "./CategoryBox";
 
+import { TransactionCategoryType } from "@/types/prisma";
+
 type UserCategoriesDisplayProps = {
-  type: "INCOME" | "EXPENSE" | "ALL";
+  type: TransactionCategoryType | "ALL";
   searchQuery: string;
 };
 

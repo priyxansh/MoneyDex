@@ -10,25 +10,10 @@ import {
   ContextMenuTrigger,
 } from "../ui/context-menu";
 
+import { Transaction } from "@/types/prisma";
+
 type TransactionProps = {
-  transaction: {
-    id: string;
-    amount: number;
-    type: "INCOME" | "EXPENSE" | "TRANSFER";
-    category: {
-      id: string;
-      name: string;
-    } | null;
-    fromAccount: {
-      id: string;
-      name: string;
-    };
-    toAccount: {
-      id: string;
-      name: string;
-    } | null;
-    createdAt: Date;
-  };
+  transaction: Transaction;
 };
 
 const Transaction = ({

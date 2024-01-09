@@ -15,35 +15,16 @@ const UserTransactionsDisplay = async ({}: UserTransactionsDisplayProps) => {
         id: user.id,
       },
     },
-    select: {
-      id: true,
-      amount: true,
-      type: true,
-      category: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      fromAccount: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      toAccount: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      createdAt: true,
+    include: {
+      fromAccount: true,
+      toAccount: true,
+      category: true,
     },
     orderBy: [
       {
         createdAt: "desc",
       },
-    ]
+    ],
   });
 
   const transactionsByDate = _.groupBy(userTransactions, (transaction) => {

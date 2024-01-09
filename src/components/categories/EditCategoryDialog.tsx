@@ -4,11 +4,13 @@ import { useState } from "react";
 import { Dialog } from "../ui/dialog";
 import EditCategoryDialogContent from "./EditCategoryDialogContent";
 
+import { TransactionCategoryType } from "@/types/prisma";
+
 type EditCategoryDialogProps = {
   children: React.ReactNode;
   id: string;
   name: string;
-  type: "INCOME" | "EXPENSE";
+  type: TransactionCategoryType;
 };
 
 const EditCategoryDialog = ({
@@ -26,7 +28,12 @@ const EditCategoryDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {children}
-      <EditCategoryDialogContent id={id} name={name} type={type} closeDialog={closeDialog} />
+      <EditCategoryDialogContent
+        id={id}
+        name={name}
+        type={type}
+        closeDialog={closeDialog}
+      />
     </Dialog>
   );
 };

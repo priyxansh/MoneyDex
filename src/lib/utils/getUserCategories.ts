@@ -1,8 +1,9 @@
 import prisma from "../prisma";
+import { TransactionCategoryType } from "@/types/prisma";
 
 export const getUserCategories = async (
   userId: string,
-  type: "ALL" | "INCOME" | "EXPENSE",
+  type: TransactionCategoryType | "ALL",
   searchQuery?: string
 ) => {
   const userCategories = await prisma.transactionCategory.findMany({

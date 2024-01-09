@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import EditCategoryForm from "./EditCategoryForm";
 
@@ -9,10 +9,12 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 
+import { TransactionCategoryType } from "@/types/prisma";
+
 type EditCategoryDialogContentProps = {
   id: string;
   name: string;
-  type: "INCOME" | "EXPENSE";
+  type: TransactionCategoryType;
   closeDialog: () => void;
 };
 
@@ -20,7 +22,7 @@ const EditCategoryDialogContent = ({
   id,
   name,
   type,
-  closeDialog
+  closeDialog,
 }: EditCategoryDialogContentProps) => {
   return (
     <DialogContent className="max-w-[500px]">
@@ -30,7 +32,12 @@ const EditCategoryDialogContent = ({
           Edit Transaction Category here. Click save when you&apos;re done.
         </DialogDescription>
       </DialogHeader>
-      <EditCategoryForm id={id} name={name} type={type} closeDialog={closeDialog} />
+      <EditCategoryForm
+        id={id}
+        name={name}
+        type={type}
+        closeDialog={closeDialog}
+      />
     </DialogContent>
   );
 };

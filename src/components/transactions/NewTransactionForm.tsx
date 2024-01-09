@@ -30,10 +30,13 @@ import {
   SelectValue,
 } from "../ui/select";
 
+import { TransactionType } from "@/types/prisma";
+import { Account, TransactionCategory } from "@prisma/client";
+
 type NewTransactionFormProps = {
-  type: "INCOME" | "EXPENSE" | "TRANSFER";
+  type: TransactionType;
   userAccounts: Account[];
-  userCategories: Category[];
+  userCategories: (Partial<TransactionCategory> & { id: string })[];
 };
 
 const NewTransactionForm = ({

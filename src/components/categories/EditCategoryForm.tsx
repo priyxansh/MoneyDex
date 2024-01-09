@@ -28,10 +28,12 @@ import {
   SelectValue,
 } from "../ui/select";
 
+import { TransactionCategoryType } from "@/types/prisma";
+
 type EditCategoryFormProps = {
   id: string;
   name: string;
-  type: "INCOME" | "EXPENSE";
+  type: TransactionCategoryType;
   closeDialog: () => void;
 };
 
