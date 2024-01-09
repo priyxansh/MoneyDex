@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dialog } from "../ui/dialog";
 import EditCategoryDialogContent from "./EditCategoryDialogContent";
 
-import { TransactionCategoryType } from "@/types/prisma";
+import { TransactionCategoryType } from "@prisma/client";
 
 type EditCategoryDialogProps = {
   children: React.ReactNode;

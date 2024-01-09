@@ -1,5 +1,5 @@
 import prisma from "../prisma";
-import { TransactionCategoryType } from "@/types/prisma";
+import { TransactionCategoryType } from "@prisma/client";
 
 export const getUserCategories = async (
   userId: string,

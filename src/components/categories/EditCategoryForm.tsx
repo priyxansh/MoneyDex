@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-import { TransactionCategoryType } from "@/types/prisma";
+import { TransactionCategoryType } from "@prisma/client";
 
 type EditCategoryFormProps = {
   id: string;

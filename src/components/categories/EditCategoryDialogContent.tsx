@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 
-import { TransactionCategoryType } from "@/types/prisma";
+import { TransactionCategoryType } from "@prisma/client";
 
 type EditCategoryDialogContentProps = {
   id: string;

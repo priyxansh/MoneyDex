@@ -30,8 +30,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-import { TransactionType } from "@/types/prisma";
-import { Account, TransactionCategory } from "@prisma/client";
+import { Account, TransactionCategory, TransactionType } from "@prisma/client";
 
 type NewTransactionFormProps = {
   type: TransactionType;

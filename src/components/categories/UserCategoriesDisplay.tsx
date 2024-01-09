@@ -4,7 +4,7 @@ import { getUserCategories } from "@/lib/utils/getUserCategories";
 
 import CategoryBox from "./CategoryBox";
 
-import { TransactionCategoryType } from "@/types/prisma";
+import { TransactionCategoryType } from "@prisma/client";
 
 type UserCategoriesDisplayProps = {
   type: TransactionCategoryType | "ALL";
