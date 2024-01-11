@@ -29,7 +29,7 @@ const CategorySearch = ({}: CategorySearchProps) => {
     }
 
     const newTimeoutId = setTimeout(() => {
-      router.push(
+      router.replace(
         `/categories?search=${searchQuery}${
           categoryType ? `&type=${categoryType}` : ""
         }`

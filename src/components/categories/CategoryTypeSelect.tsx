@@ -32,7 +32,7 @@ const CategoryTypeSelect = ({}: CategoryTypeSelectProps) => {
             return;
           }
 
-          router.push(
+          router.replace(
             `/categories${
               value === "ALL" ? "" : `?type=${value.toLowerCase()}`
             }`
