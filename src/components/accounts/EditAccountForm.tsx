@@ -1,6 +1,6 @@
 "use client";
 
-import { accountFormSchema } from "@/lib/zod-schemas/accountFormSchema";
+import { editAccountFormSchema as formSchema } from "@/lib/zod-schemas/accountFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,10 +10,12 @@ import { Button } from "../ui/button";
 import { updateAccount } from "@/actions/account-actions";
 import { getSubmitOnEnter } from "@/lib/utils/getSubmitOnEnter";
 import { toast } from "sonner";
+import { Switch } from "../ui/switch";
 
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -33,17 +35,18 @@ const EditAccountForm = ({
   accountBalance,
   closeDialog,
 }: EditAccountFormProps) => {
-  const form = useForm<z.infer<typeof accountFormSchema>>({
-    resolver: zodResolver(accountFormSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       accountName: accountName,
       balance: accountBalance,
+      recordDifference: true,
     },
   });
 
-  const { isSubmitting, isDirty } = form.formState;
+  const { isSubmitting, isDirty, dirtyFields } = form.formState;
 
-  const onSubmit = async (data: z.infer<typeof accountFormSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!isDirty) {
       return;
     }
@@ -96,6 +99,27 @@ const EditAccountForm = ({
                   <Input placeholder="0" {...field} autoComplete="off" />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="recordDifference"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Record Difference</FormLabel>
+                  <FormDescription>
+                    Record a new transaction when the balance changes.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={!dirtyFields.balance}
+                  />
+                </FormControl>
               </FormItem>
             )}
           />

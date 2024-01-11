@@ -1,8 +1,9 @@
+import { TransactionType } from "@prisma/client";
 import { z } from "zod";
 
 export const transactionFormSchema = z
   .object({
-    type: z.enum(["INCOME", "EXPENSE", "TRANSFER"]),
+    type: z.nativeEnum(TransactionType),
     amount: z.coerce
       .number({ invalid_type_error: "Amount must be a number." })
       .min(1, { message: "Amount must be greater than 0." })

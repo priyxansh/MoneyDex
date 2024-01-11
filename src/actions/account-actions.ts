@@ -1,12 +1,16 @@
 "use server";
 
 import { z } from "zod";
-import { newAccountFormSchema, editAccountFormSchema } from "@/lib/zod-schemas/accountFormSchema";
+import {
+  newAccountFormSchema,
+  editAccountFormSchema,
+} from "@/lib/zod-schemas/accountFormSchema";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/next-auth";
 import { revalidatePath } from "next/cache";
+import { TransactionType } from "@prisma/client";
 
 export const createAccount = async (
   data: z.infer<typeof newAccountFormSchema>
@@ -61,12 +65,27 @@ export const updateAccount = async (
     return redirect("/auth/signin");
   }
 
-  const { accountName: name, balance } = data;
+  const { accountName: name, balance, recordDifference } = data;
 
   try {
     editAccountFormSchema.parse(data);
 
-    const updatedAccount = await prisma.account.update({
+    const account = await prisma.account.findUnique({
+      where: {
+        id: id,
+        user: {
+          id: session.user.id,
+        },
+      },
+    });
+
+    if (!account) {
+      const error = new Error("Account not found.");
+      error.name = "CustomError";
+      throw error;
+    }
+
+    const updateAccountPromise = prisma.account.update({
       where: {
         id: id,
         user: {
@@ -78,6 +97,44 @@ export const updateAccount = async (
         balance: balance,
       },
     });
+
+    if (recordDifference && balance !== account.balance) {
+      const difference = Math.abs(balance - account.balance);
+      const transactionType: TransactionType =
+        balance > account.balance ? "DIFFERENCE_INCOME" : "DIFFERENCE_EXPENSE";
+
+      const newTransactionPromise = prisma.transaction.create({
+        data: {
+          amount: difference,
+          type: transactionType,
+          fromAccount: {
+            connect: {
+              id: id,
+            },
+          },
+          user: {
+            connect: {
+              id: session.user.id,
+            },
+          },
+        },
+      });
+
+      const [updatedAccount, _] = await prisma.$transaction([
+        updateAccountPromise,
+        newTransactionPromise,
+      ]);
+
+      revalidatePath("/accounts");
+      revalidatePath("/transactions");
+
+      return {
+        success: true,
+        message: `Account ${updatedAccount.name} updated successfully. Balance: $${updatedAccount.balance}.`,
+      };
+    }
+
+    const updatedAccount = await updateAccountPromise;
 
     revalidatePath("/accounts");
 

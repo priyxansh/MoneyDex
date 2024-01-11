@@ -64,6 +64,8 @@ enum TransactionType {
   INCOME
   EXPENSE
   TRANSFER
+  DIFFERENCE_INCOME
+  DIFFERENCE_EXPENSE
 }
 
 enum TransactionCategoryType {

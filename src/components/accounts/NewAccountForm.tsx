@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { accountFormSchema as formSchema } from "@/lib/zod-schemas/accountFormSchema";
+import { newAccountFormSchema as formSchema } from "@/lib/zod-schemas/accountFormSchema";
 import { createAccount } from "@/actions/account-actions";
 import CreateAccountButton from "./CreateAccountButton";
 import { useRouter } from "next/navigation";

@@ -23,6 +23,14 @@ export const createTransaction = async (
   try {
     transactionFormSchema.parse(data);
 
+    // Avoid exposing create difference transaction functionality to the user
+
+    if (type === "DIFFERENCE_EXPENSE" || type === "DIFFERENCE_INCOME") {
+      const error = new Error("Cannot create a difference transaction.");
+      error.name = "CustomError";
+      throw error;
+    }
+
     const fromAccount = await prisma.account.findUnique({
       where: {
         id: fromAccountId,
@@ -304,7 +312,10 @@ export const undoTransaction = async (id: string) => {
         decrement?: number;
       } = {};
 
-      if (transaction.type === "INCOME") {
+      if (
+        transaction.type === "INCOME" ||
+        transaction.type === "DIFFERENCE_INCOME"
+      ) {
         if (transaction.fromAccount.balance < transaction.amount) {
           const error = new Error(
             "Insufficient funds in account to undo income."
@@ -314,7 +325,10 @@ export const undoTransaction = async (id: string) => {
         }
 
         balance["decrement"] = transaction.amount;
-      } else if (transaction.type === "EXPENSE") {
+      } else if (
+        transaction.type === "EXPENSE" ||
+        transaction.type === "DIFFERENCE_EXPENSE"
+      ) {
         balance["increment"] = transaction.amount;
       }
 

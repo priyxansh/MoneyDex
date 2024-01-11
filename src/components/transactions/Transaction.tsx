@@ -16,17 +16,26 @@ type TransactionProps = {
   transaction: Transaction;
 };
 
-const Transaction = ({
-  transaction: {
-    id,
-    fromAccount,
-    toAccount,
-    category,
-    type,
-    amount,
-    createdAt,
-  },
-}: TransactionProps) => {
+const returnCategoryName = ({
+  fromAccount,
+  toAccount,
+  type,
+  category,
+}: Transaction) => {
+  if (type === "TRANSFER") {
+    return `${fromAccount.name} -> ${toAccount?.name}`;
+  }
+
+  if (type === "DIFFERENCE_EXPENSE" || type === "DIFFERENCE_INCOME") {
+    return `Difference`;
+  }
+
+  return category ? category.name : `General`;
+};
+
+const Transaction = ({ transaction }: TransactionProps) => {
+  const { id, fromAccount, type, amount, createdAt } = transaction;
+
   return (
     <UndoTransactionDialog transactionId={id}>
       <ContextMenu>
@@ -42,19 +51,18 @@ const Transaction = ({
                   {fromAccount.name}
                 </span>
                 <span className="sm:text-sm text-[12px] text-gray-500 line-clamp-2 break-words">
-                  {type === "TRANSFER"
-                    ? `${fromAccount.name} -> ${toAccount?.name}`
-                    : category
-                    ? category.name
-                    : `General`}
+                  {returnCategoryName(transaction)}
                 </span>
               </div>
               <span
                 className={`text-sm font-semibold text-center sm:text-right ${
-                  type === "EXPENSE" ? "text-destructive" : "text-primary"
+                  type === "EXPENSE" || type === "DIFFERENCE_EXPENSE"
+                    ? "text-destructive"
+                    : "text-primary"
                 }`}
               >
-                {type === "EXPENSE" ? "-" : ""}${amount}
+                {type === "EXPENSE" || type === "DIFFERENCE_EXPENSE" ? "-" : ""}
+                ${amount}
               </span>
               <span className="text-sm text-right text-gray-500">
                 {new Date(createdAt).toTimeString().slice(0, 5)}
