@@ -5,9 +5,15 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { Suspense } from "react";
 
-type TransactionsPageProps = {};
+type TransactionsPageProps = {
+  searchParams?: {
+    type?: string;
+    search?: string;
+  };
+};
 
-const TransactionsPage = ({}: TransactionsPageProps) => {
+const TransactionsPage = ({ searchParams }: TransactionsPageProps) => {
+  
   return (
     <main className="px-2 sm:px-5 py-5 flex flex-col flex-grow">
       <div className="flex justify-between gap-4 flex-wrap px-3 sm:px-0">
@@ -19,9 +25,10 @@ const TransactionsPage = ({}: TransactionsPageProps) => {
           </Link>
         </Button>
       </div>
-      <Suspense fallback={<Spinner className="h-7 w-7 m-auto" />}>
-        <UserTransactionsDisplay />
-      </Suspense>
+        <Suspense fallback={<Spinner className="h-7 w-7 m-auto" />}>
+          <UserTransactionsDisplay />
+        </Suspense>
+     
     </main>
   );
 };

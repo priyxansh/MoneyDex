@@ -32,25 +32,34 @@ const UserTransactionsDisplay = async ({}: UserTransactionsDisplayProps) => {
   });
 
   return (
-    <section className="mt-6 flex flex-col gap-4">
-      {Object.keys(transactionsByDate).map((date) => {
-        return (
-          <div className="flex flex-col gap-3" key={date}>
-            <h2 className="w-full flex items-center gap-4">
-              <span className="flex-grow h-[1px] bg-secondary"></span>
-              <span className="font-semibold">{date}</span>
-              <span className="flex-grow h-[1px] bg-secondary"></span>
-            </h2>
-            <div className="w-full flex flex-col gap-2 justify-center">
-              {transactionsByDate[date].map((transaction) => {
-                return (
-                  <Transaction transaction={transaction} key={transaction.id} />
-                );
-              })}
+    <section className="mt-4 flex flex-col gap-2">
+      <p className="text-sm text-gray-500 w-full">
+        <span className="hidden sm:inline">Right-click</span>{" "}
+        <span className="sm:hidden">Long-press</span> for more options.
+      </p>
+      <div className="flex flex-col gap-4">
+        {Object.keys(transactionsByDate).map((date) => {
+          return (
+            <div className="flex flex-col gap-3" key={date}>
+              <h2 className="w-full flex items-center gap-4">
+                <span className="flex-grow h-[1px] bg-secondary"></span>
+                <span className="font-semibold">{date}</span>
+                <span className="flex-grow h-[1px] bg-secondary"></span>
+              </h2>
+              <div className="w-full flex flex-col gap-2 justify-center">
+                {transactionsByDate[date].map((transaction) => {
+                  return (
+                    <Transaction
+                      transaction={transaction}
+                      key={transaction.id}
+                    />
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </section>
   );
 };
