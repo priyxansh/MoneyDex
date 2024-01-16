@@ -32,7 +32,7 @@ const UserTransactionsDisplay = async ({}: UserTransactionsDisplayProps) => {
   });
 
   return (
-    <section className="mt-4 flex flex-col gap-2">
+    <section className="mt-2 flex flex-col gap-2">
       <p className="text-sm text-gray-500 w-full">
         <span className="hidden sm:inline">Right-click</span>{" "}
         <span className="sm:hidden">Long-press</span> for more options.

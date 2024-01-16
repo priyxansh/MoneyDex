@@ -6,6 +6,8 @@ export const getUserCategories = async (
   type: TransactionCategoryType | "ALL",
   searchQuery?: string
 ) => {
+  // TODO: Add error handling, select and orderby arguements and handle user session here instead of receiving userId as an arguement
+
   const userCategories = await prisma.transactionCategory.findMany({
     where: {
       userId: userId,
@@ -23,11 +25,6 @@ export const getUserCategories = async (
         name: "asc",
       },
     ],
-    select: {
-      id: true,
-      name: true,
-      type: true,
-    },
   });
 
   return userCategories;

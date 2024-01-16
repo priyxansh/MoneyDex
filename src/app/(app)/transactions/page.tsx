@@ -1,4 +1,5 @@
 import Spinner from "@/components/Spinner";
+import TransactionFilters from "@/components/transactions/TransactionFilters";
 import UserTransactionsDisplay from "@/components/transactions/UserTransactionsDisplay";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@radix-ui/react-icons";
@@ -25,6 +26,7 @@ const TransactionsPage = ({ searchParams }: TransactionsPageProps) => {
           </Link>
         </Button>
       </div>
+      <TransactionFilters />
         <Suspense fallback={<Spinner className="h-7 w-7 m-auto" />}>
           <UserTransactionsDisplay />
         </Suspense>
