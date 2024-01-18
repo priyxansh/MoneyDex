@@ -15,10 +15,6 @@ const UserCategoriesDisplay = async ({
   type,
   searchQuery,
 }: UserCategoriesDisplayProps) => {
-
-  // For testing purposes
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-
   const { user } = (await getServerSession(authOptions)) as Session;
 
   const userCategories = await getUserCategories(user.id, type, searchQuery);
