@@ -3,9 +3,12 @@
 import { useTransactionFilterContext } from "@/contexts/TransactionFilterContext";
 import { Button } from "../ui/button";
 import FilterTabs from "./FilterTabs";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -16,10 +19,40 @@ import {
 type TransactionFilterSheetProps = {};
 
 const TransactionFilterSheet = ({}: TransactionFilterSheetProps) => {
-  const { filter } = useTransactionFilterContext();
+  const { filter, updateFilter } = useTransactionFilterContext();
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeSheet = () => {
+    setIsOpen(false);
+  };
+
+  const cancelFilter = () => {
+    updateFilter({
+      type: "CANCEL",
+    });
+  };
+
+  const applyFilter = () => {
+    if (
+      [
+        filter.sourceAccounts,
+        filter.targetAccounts,
+        filter.categories,
+        filter.types,
+      ].every((arr) => arr.length === 0)
+    ) {
+      router.replace(`/transactions`);
+      return;
+    }
+
+    const encodedFilter = encodeURIComponent(JSON.stringify(filter));
+    router.replace(`/transactions?filter=${encodedFilter}`);
+    closeSheet();
+  };
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button variant={"outline"}>Filters</Button>
       </SheetTrigger>
@@ -37,14 +70,16 @@ const TransactionFilterSheet = ({}: TransactionFilterSheetProps) => {
           <FilterTabs />
         </div>
         <div className="flex flex-wrap gap-2 items-center">
-          <Button variant="outline" className="flex-grow">
-            Cancel
-          </Button>
-          <Button
-            variant="default"
-            className="flex-grow"
-            onClick={() => console.log(filter)}
-          >
+          <SheetClose asChild>
+            <Button
+              variant="outline"
+              className="flex-grow"
+              onClick={cancelFilter}
+            >
+              Cancel
+            </Button>
+          </SheetClose>
+          <Button variant="default" className="flex-grow" onClick={applyFilter}>
             Apply
           </Button>
         </div>

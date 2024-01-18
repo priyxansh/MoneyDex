@@ -3,14 +3,38 @@ import prisma from "@/lib/prisma";
 import { Session, getServerSession } from "next-auth";
 import _ from "lodash";
 import Transaction from "./Transaction";
+import { TransactionFilter } from "@/types/transaction-filter";
+import { Prisma } from "@prisma/client";
 
-type UserTransactionsDisplayProps = {};
+type UserTransactionsDisplayProps = {
+  filter?: TransactionFilter;
+};
 
-const UserTransactionsDisplay = async ({}: UserTransactionsDisplayProps) => {
+const UserTransactionsDisplay = async ({
+  filter,
+}: UserTransactionsDisplayProps) => {
   const { user } = (await getServerSession(authOptions)) as Session;
 
+  const whereClause: Prisma.TransactionWhereInput = {
+    fromAccountId:
+      filter?.sourceAccounts.length ?? 0 > 0
+        ? { in: filter?.sourceAccounts }
+        : undefined,
+    toAccountId:
+      filter?.targetAccounts.length ?? 0 > 0
+        ? { in: filter?.targetAccounts }
+        : undefined,
+    categoryId:
+      filter?.categories.length ?? 0 > 0
+        ? { in: filter?.categories }
+        : undefined,
+    type: filter?.types.length ?? 0 > 0 ? { in: filter?.types } : undefined,
+  };
+
+  // Todo: put this in a separate function
   const userTransactions = await prisma.transaction.findMany({
     where: {
+      ...whereClause,
       user: {
         id: user.id,
       },

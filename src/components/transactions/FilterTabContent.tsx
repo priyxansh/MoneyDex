@@ -22,11 +22,11 @@ const FilterTabContent = ({ filterTabTrigger }: FilterTabContentProps) => {
     >
       <ScrollArea className="h-full overflow-auto">
         {filterTabTrigger.filterList.map((item) => {
-          const filterContent = (filter as { [key: string]: string[] })[
-            filterTabTrigger.value
-          ];
+          const filterContent =
+            filter[filterTabTrigger.value as keyof typeof filter];
 
-          const isChecked = filterContent.includes(item.id);
+          // To fix: Type string is not assignable to type TransactionType enum. Will find a better structure for storing types.
+          const isChecked = filterContent.includes(item.id as any);
 
           return (
             <Label
@@ -47,12 +47,14 @@ const FilterTabContent = ({ filterTabTrigger }: FilterTabContentProps) => {
                   if (checked) {
                     updateFilter({
                       type: filterTabTrigger.actionType,
-                      payload: [...filterContent, item.id],
+                      payload: [...filterContent, item.id] as any,
                     });
                   } else {
                     updateFilter({
                       type: filterTabTrigger.actionType,
-                      payload: filterContent.filter((id) => id !== item.id),
+                      payload: filterContent.filter(
+                        (id) => id !== item.id
+                      ) as any,
                     });
                   }
                 }}

@@ -1,14 +1,16 @@
 "use client";
 
+import { Account, TransactionCategory } from "@prisma/client";
+import { useSearchParams } from "next/navigation";
+import { createContext, useContext, useReducer } from "react";
+import { parseURITransactionFilter } from "@/lib/utils/parseURITransactionFilter";
+
 import {
   FilterTabTrigger,
   TransactionFilter,
   TransactionFilterAction,
   TransactionFilterContextType,
 } from "@/types/transaction-filter";
-
-import { Account, TransactionCategory } from "@prisma/client";
-import { createContext, useContext, useReducer } from "react";
 
 const TransactionFilterContext =
   createContext<TransactionFilterContextType>(null);
@@ -24,12 +26,19 @@ const TransactionFilterProvider = ({
   userAccounts,
   userTransactionCategories,
 }: TransactionFilterProviderProps) => {
-  const initialState = {
+  const searchParams = useSearchParams();
+
+  const URIFilter = searchParams.get("filter");
+  const parsedURIFilter = parseURITransactionFilter(URIFilter);
+
+  const resetState: TransactionFilter = {
     sourceAccounts: [],
     targetAccounts: [],
     categories: [],
     types: [],
   };
+
+  const initialState = parsedURIFilter ?? resetState;
 
   const reducer = (
     state: TransactionFilter,
@@ -44,14 +53,14 @@ const TransactionFilterProvider = ({
         return { ...state, categories: action.payload };
       case "SET_TYPES":
         return { ...state, types: action.payload };
-      case "RESET":
+      case "CANCEL":
         return initialState;
+      case "RESET":
+        return resetState;
       default:
         return state;
     }
   };
-
-  const [filter, dispatch] = useReducer(reducer, initialState);
 
   const filterTabTriggers: FilterTabTrigger[] = [
     {
@@ -99,9 +108,12 @@ const TransactionFilterProvider = ({
     },
   ];
 
+  const [filter, dispatch] = useReducer(reducer, initialState);
+
   return (
     <TransactionFilterContext.Provider
       value={{
+        initialFilter: initialState,
         filter,
         updateFilter: dispatch,
         userAccounts,
