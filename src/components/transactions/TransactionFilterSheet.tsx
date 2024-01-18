@@ -4,7 +4,6 @@ import { useTransactionFilterContext } from "@/contexts/TransactionFilterContext
 import { Button } from "../ui/button";
 import FilterTabs from "./FilterTabs";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import {
   Sheet,
@@ -21,11 +20,6 @@ type TransactionFilterSheetProps = {};
 const TransactionFilterSheet = ({}: TransactionFilterSheetProps) => {
   const { filter, updateFilter } = useTransactionFilterContext();
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-
-  const closeSheet = () => {
-    setIsOpen(false);
-  };
 
   const cancelFilter = () => {
     updateFilter({
@@ -48,11 +42,10 @@ const TransactionFilterSheet = ({}: TransactionFilterSheetProps) => {
 
     const encodedFilter = encodeURIComponent(JSON.stringify(filter));
     router.replace(`/transactions?filter=${encodedFilter}`);
-    closeSheet();
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet>
       <SheetTrigger asChild>
         <Button variant={"outline"}>Filters</Button>
       </SheetTrigger>
@@ -79,9 +72,15 @@ const TransactionFilterSheet = ({}: TransactionFilterSheetProps) => {
               Cancel
             </Button>
           </SheetClose>
-          <Button variant="default" className="flex-grow" onClick={applyFilter}>
-            Apply
-          </Button>
+          <SheetClose asChild>
+            <Button
+              variant="default"
+              className="flex-grow"
+              onClick={applyFilter}
+            >
+              Apply
+            </Button>
+          </SheetClose>
         </div>
       </SheetContent>
     </Sheet>
