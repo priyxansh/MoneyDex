@@ -15,7 +15,6 @@ type CategoriesPageProps = {
 };
 
 const CategoriesPage = ({ searchParams }: CategoriesPageProps) => {
-  console.log("CategoriesPage", searchParams);
   const type = searchParams?.type?.toUpperCase() ?? "ALL";
   const searchQuery = searchParams?.search ?? "";
   const keyString = `search=${searchParams?.search}&type=${searchParams?.type}`;
