@@ -9,6 +9,7 @@ const TopLoader = ({}: TopLoaderProps) => {
   const { theme } = useTheme();
   return (
     <NextTopLoader
+      showSpinner={false}
       color={theme === "dark" ? "hsl(227 44% 71%)" : "hsl(225 60% 30%)"}
     />
   );
