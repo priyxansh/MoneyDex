@@ -8,6 +8,7 @@ import TransactionFilterProvider from "@/contexts/TransactionFilterContext";
 type TransactionFiltersProps = {};
 
 const TransactionFilters = async ({}: TransactionFiltersProps) => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   const session = (await getServerSession(authOptions)) as Session;
 
   const userAccounts = await getUserAccounts(session.user.id);
@@ -17,14 +18,12 @@ const TransactionFilters = async ({}: TransactionFiltersProps) => {
   );
 
   return (
-    <section className="mt-4 flex gap-2 flex-wrap">
-      <TransactionFilterProvider
-        userAccounts={userAccounts}
-        userTransactionCategories={userTransactionCategories}
-      >
-        <TransactionFilterSheet />
-      </TransactionFilterProvider>
-    </section>
+    <TransactionFilterProvider
+      userAccounts={userAccounts}
+      userTransactionCategories={userTransactionCategories}
+    >
+      <TransactionFilterSheet />
+    </TransactionFilterProvider>
   );
 };
 

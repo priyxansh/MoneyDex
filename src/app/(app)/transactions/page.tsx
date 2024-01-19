@@ -2,6 +2,7 @@ import Spinner from "@/components/Spinner";
 import TransactionFilters from "@/components/transactions/TransactionFilters";
 import UserTransactionsDisplay from "@/components/transactions/UserTransactionsDisplay";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { parseURITransactionFilter } from "@/lib/utils/parseURITransactionFilter";
 import { PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
@@ -34,10 +35,13 @@ const TransactionsPage = ({ searchParams }: TransactionsPageProps) => {
           </Link>
         </Button>
       </div>
-      {/* Todo Add skeleton */}
-      <Suspense fallback={<p>Loading filter component...</p>}>
-        <TransactionFilters />
-      </Suspense>
+      <section className="mt-4 flex gap-2 flex-wrap">
+        <Suspense
+          fallback={<Skeleton className="w-[80px] h-[40px] rounded-md" />}
+        >
+          <TransactionFilters />
+        </Suspense>
+      </section>
       <Suspense
         key={suspenseKey}
         fallback={<Spinner className="h-7 w-7 m-auto" />}
