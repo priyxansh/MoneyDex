@@ -24,8 +24,8 @@ const TransactionsPage = ({ searchParams }: TransactionsPageProps) => {
   const parsedFilter = parseURITransactionFilter(filter);
 
   return (
-    <main className="px-2 sm:px-5 py-5 flex flex-col flex-grow">
-      <div className="flex justify-between gap-4 flex-wrap px-3 sm:px-0">
+    <main className="px-3 sm:px-5 py-5 flex flex-col flex-grow">
+      <div className="flex justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-semibold">Transactions</h1>
         <Button asChild className="w-full sm:w-auto">
           <Link href="/transactions/new">
