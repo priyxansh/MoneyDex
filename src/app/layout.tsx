@@ -4,7 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import SessionProvider from "@/components/providers/SessionProvider";
 import { Toaster } from "@/components/ui/sonner";
-import TopLoader from "@/components/TopLoader";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,7 +31,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <TopLoader />
+            <NextTopLoader showSpinner={false} color="hsl(225 60% 30%)" />
             {children}
             <Toaster visibleToasts={3} />
           </ThemeProvider>
