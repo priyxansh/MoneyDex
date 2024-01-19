@@ -17,7 +17,7 @@ const Loading = ({}: LoadingProps) => {
           </Link>
         </Button>
       </div>
-      <div className="h-full grid place-items-center">
+      <div className="flex-grow grid place-items-center">
         <Spinner className="h-7 w-7 m-auto" />
       </div>
     </div>
