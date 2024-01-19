@@ -39,7 +39,7 @@ const CategoriesPage = ({ searchParams }: CategoriesPageProps) => {
           </Link>
         </Button>
       </div>
-      <section className="mt-4">
+      <section className="mt-4 flex flex-col flex-grow">
         <CategoriesFilter />
         <Suspense
           key={keyString}
