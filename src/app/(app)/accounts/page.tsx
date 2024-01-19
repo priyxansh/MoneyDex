@@ -9,7 +9,7 @@ type AccountsPageProps = {};
 
 const AccountsPage = ({}: AccountsPageProps) => {
   return (
-    <main className="px-5 py-5 flex flex-col flex-grow">
+    <div className="flex flex-col flex-grow">
       <div className="flex justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-semibold">Accounts</h1>
         <Button variant="default" asChild className="w-full sm:w-auto">
@@ -24,7 +24,7 @@ const AccountsPage = ({}: AccountsPageProps) => {
       <Suspense fallback={<Spinner className="h-7 w-7 m-auto" />}>
         <UserAccountsDisplay />
       </Suspense>
-    </main>
+    </div>
   );
 };
 

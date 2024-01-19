@@ -4,10 +4,10 @@ type NewCategoryPageProps = {};
 
 const NewCategoryPage = ({}: NewCategoryPageProps) => {
   return (
-    <main className="px-5 py-5">
+    <div>
       <h1 className="text-2xl font-semibold">New Category</h1>
       <NewCategoryForm />
-    </main>
+    </div>
   );
 };
 
