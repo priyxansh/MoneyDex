@@ -1,12 +1,13 @@
+import { Suspense } from "react";
 import Container from "./Container";
 import NavBar from "./NavBar";
 import ThemeToggler from "./ThemeToggler";
 import UserAvatarMenu from "./UserAvatarMenu";
+import { Skeleton } from "./ui/skeleton";
 
 type HeaderProps = {};
 
 const Header = async ({}: HeaderProps) => {
-
   const routes = [
     {
       id: 1,
@@ -31,7 +32,9 @@ const Header = async ({}: HeaderProps) => {
         <NavBar routes={routes} />
         <div className="flex items-center gap-3 ml-auto">
           <ThemeToggler />
-          <UserAvatarMenu />
+          <Suspense fallback={<Skeleton className="h-7 w-7 rounded-full"/>}>
+            <UserAvatarMenu />
+          </Suspense>
         </div>
       </Container>
     </header>

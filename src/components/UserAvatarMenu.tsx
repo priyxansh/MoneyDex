@@ -1,6 +1,8 @@
-"use client";
-
 import UserAvatar from "./UserAvatar";
+import { Button } from "./ui/button";
+import SignOutButton from "./SignOutButton";
+import { getServerSession } from "next-auth";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,14 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "./ui/button";
-import SignOutButton from "./SignOutButton";
-import { useSession } from "next-auth/react";
+import { authOptions } from "@/lib/next-auth";
 
 type UserAvatarMenuProps = {};
 
-const UserAvatarMenu = ({}: UserAvatarMenuProps) => {
-  const { data: session } = useSession();
+const UserAvatarMenu = async ({}: UserAvatarMenuProps) => {
+  const session = await getServerSession(authOptions);
 
   if (!session) return null;
 

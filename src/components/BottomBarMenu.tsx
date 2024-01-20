@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,19 +8,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import UserAvatar from "./UserAvatar";
 import { Button } from "./ui/button";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { useSession } from "next-auth/react";
 import SignOutButton from "./SignOutButton";
 import DropDownThemeToggler from "./DropDownThemeToggler";
 import Link from "next/link";
+import { Suspense } from "react";
+import { Skeleton } from "./ui/skeleton";
+import BottomBarUserProfile from "./BottomBarUserProfile";
 
 type BottomBarMenuProps = {};
 
 const BottomBarMenu = ({}: BottomBarMenuProps) => {
-  const { data: session } = useSession();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,13 +33,9 @@ const BottomBarMenu = ({}: BottomBarMenuProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-[250px]">
         <DropdownMenuLabel className="flex items-center gap-4">
-          <UserAvatar className="h-8 w-8" />
-          <div className="flex flex-col">
-            <span className="font-medium">{session?.user.name}</span>
-            <span className="text-gray-500 text-sm break-all">
-              {session?.user.email}
-            </span>
-          </div>
+          <Suspense fallback={<Skeleton className="w-56 h-10" />}>
+            <BottomBarUserProfile />
+          </Suspense>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

@@ -1,4 +1,3 @@
-import UserAvatar from "./UserAvatar";
 import ThemeToggler from "./ThemeToggler";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -6,6 +5,8 @@ import SideBarLink from "./SideBarLink";
 import SideBarSeparator from "./SideBarSeparator";
 import { PlusIcon } from "@radix-ui/react-icons";
 import SideBarUserProfile from "./SideBarUserProfile";
+import { Suspense } from "react";
+import { Skeleton } from "./ui/skeleton";
 
 type SideBarProps = {};
 
@@ -63,8 +64,9 @@ const SideBar = async ({}: SideBarProps) => {
       <div className="mt-auto">
         <SideBarSeparator className="my-3" />
         <div className="flex gap-3 items-center justify-center">
-          <UserAvatar className="h-8 w-8 mr-auto" />
-          <SideBarUserProfile />
+          <Suspense fallback={<Skeleton className="h-8 w-full" />}>
+            <SideBarUserProfile />
+          </Suspense>
         </div>
         <div className="flex items-center justify-center mt-3"></div>
       </div>
