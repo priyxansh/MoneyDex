@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import HeroButtons from "./HeroButtons";
-import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 type HeroProps = {};
 
@@ -19,7 +19,7 @@ const Hero = ({}: HeroProps) => {
           insightful graphs and own your financial journey.
         </p>
         <div className="flex gap-4 w-full justify-center sm:justify-normal flex-wrap">
-          <Suspense fallback={<Button variant="secondary">Loading...</Button>}>
+          <Suspense fallback={<Skeleton className="w-28 h-10" />}>
             <HeroButtons />
           </Suspense>
         </div>
