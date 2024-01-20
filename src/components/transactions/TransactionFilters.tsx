@@ -8,7 +8,6 @@ import TransactionFilterProvider from "@/contexts/TransactionFilterContext";
 type TransactionFiltersProps = {};
 
 const TransactionFilters = async ({}: TransactionFiltersProps) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   const session = (await getServerSession(authOptions)) as Session;
 
   const userAccounts = await getUserAccounts(session.user.id);
