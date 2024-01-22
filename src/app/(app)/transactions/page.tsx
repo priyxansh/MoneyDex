@@ -1,8 +1,11 @@
+import { validateTransactionPaginationParams } from "@/actions/transaction-actions";
 import Spinner from "@/components/Spinner";
 import TransactionFilters from "@/components/transactions/TransactionFilters";
+import TransactionPagination from "@/components/transactions/TransactionPagination";
 import UserTransactionsDisplay from "@/components/transactions/UserTransactionsDisplay";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { parsePaginationParams } from "@/lib/utils/parsePaginationParams";
 import { parseURITransactionFilter } from "@/lib/utils/parseURITransactionFilter";
 import { PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
@@ -11,18 +14,29 @@ import { Suspense } from "react";
 type TransactionsPageProps = {
   searchParams?: {
     filter?: string;
-    search?: string;
+    page?: string;
+    perPage?: string;
   };
 };
 
-const TransactionsPage = ({ searchParams }: TransactionsPageProps) => {
-  const suspenseKey = `filter=${searchParams?.filter}&search=${searchParams?.search}`;
+const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
+  const filterSuspenseKey = `filter=${searchParams?.filter}`;
 
   // Access search params
+  const page = searchParams?.page;
+  const perPage = searchParams?.perPage;
   const filter = searchParams?.filter;
-  const search = searchParams?.search;
 
+  // Parse params to usable values
   const parsedFilter = parseURITransactionFilter(filter);
+  const { parsedPage, parsedPerPage } = parsePaginationParams({ page, perPage });
+
+  // Redirect if page params are invalid
+  // Todo: do this for filter
+  await validateTransactionPaginationParams({
+    page: parsedPage,
+    perPage: parsedPerPage,
+  });
 
   return (
     <div className="flex flex-col flex-grow">
@@ -42,11 +56,22 @@ const TransactionsPage = ({ searchParams }: TransactionsPageProps) => {
           <TransactionFilters />
         </Suspense>
       </section>
+      <Suspense fallback={null}>
+        <TransactionPagination
+          page={parsedPage}
+          perPage={parsedPerPage}
+          filter={filter}
+        />
+      </Suspense>
       <Suspense
-        key={suspenseKey}
+        key={filterSuspenseKey}
         fallback={<Spinner className="h-7 w-7 m-auto" />}
       >
-        <UserTransactionsDisplay filter={parsedFilter} />
+        <UserTransactionsDisplay
+          page={parsedPage}
+          perPage={parsedPerPage}
+          filter={parsedFilter}
+        />
       </Suspense>
     </div>
   );

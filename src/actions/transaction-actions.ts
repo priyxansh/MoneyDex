@@ -2,7 +2,9 @@
 
 import { authOptions } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
+import { handlePageRedirect } from "@/lib/utils/handlePageRedirect";
 import { transactionFormSchema } from "@/lib/zod-schemas/transactionFormSchema";
+import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -375,5 +377,80 @@ export const undoTransaction = async (id: string) => {
           ? error.message
           : "An error occurred while undoing the transaction.",
     };
+  }
+};
+
+export const getTransactionCount = async ({
+  where,
+  take,
+  skip,
+}: {
+  where?: Prisma.TransactionWhereInput;
+  take?: number;
+  skip?: number;
+}) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  try {
+    const whereClause = {
+      ...where,
+      user: {
+        id: session.user.id,
+      },
+    };
+
+    const count = await prisma.transaction.count({
+      where: whereClause,
+      take: take,
+      skip: skip,
+    });
+
+    return {
+      success: true,
+      count: count,
+    };
+  } catch (error: any) {
+    console.log("Error getting transaction count: ", error);
+    return {
+      success: false,
+      message:
+        error.name === "CustomError"
+          ? error.message
+          : "An error occurred while getting the transaction count.",
+    };
+  }
+};
+
+export const validateTransactionPaginationParams = async ({
+  page,
+  perPage,
+}: {
+  page: number;
+  perPage: number;
+}) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  handlePageRedirect({
+    page: page,
+    perPage: perPage,
+    redirectURL: "/transactions",
+  });
+
+  const countResult = (await getTransactionCount({})) ?? 0;
+
+  const count = countResult.count ?? 0;
+
+  const totalPages = Math.ceil(count / perPage);
+
+  if (page > totalPages) {
+    return redirect(`/transactions?page=${totalPages}&perPage=${perPage}`);
   }
 };

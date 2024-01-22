@@ -8,13 +8,18 @@ import { Prisma } from "@prisma/client";
 
 type UserTransactionsDisplayProps = {
   filter?: TransactionFilter;
+  page?: number;
+  perPage?: number;
 };
 
 const UserTransactionsDisplay = async ({
   filter,
+  page = 1,
+  perPage = 10,
 }: UserTransactionsDisplayProps) => {
   const { user } = (await getServerSession(authOptions)) as Session;
 
+  // Todo: Open Close principle
   const whereClause: Prisma.TransactionWhereInput = {
     fromAccountId:
       filter?.sourceAccounts.length ?? 0 > 0
@@ -30,6 +35,9 @@ const UserTransactionsDisplay = async ({
         : undefined,
     type: filter?.types.length ?? 0 > 0 ? { in: filter?.types } : undefined,
   };
+
+  const skip = (page - 1) * perPage;
+  const take = perPage;
 
   // Todo: put this in a separate function
   const userTransactions = await prisma.transaction.findMany({
@@ -49,6 +57,8 @@ const UserTransactionsDisplay = async ({
         createdAt: "desc",
       },
     ],
+    skip: skip,
+    take: take,
   });
 
   const transactionsByDate = _.groupBy(userTransactions, (transaction) => {
