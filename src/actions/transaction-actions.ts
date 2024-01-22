@@ -12,6 +12,51 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+export const getTransactions = async (options?: {
+  where?: Prisma.TransactionWhereInput;
+  orderBy?:
+    | Prisma.TransactionOrderByWithRelationInput
+    | Prisma.TransactionOrderByWithRelationInput[];
+  include?: Prisma.TransactionInclude;
+  take?: number;
+  skip?: number;
+}) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  try {
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        ...options?.where,
+        user: {
+          id: session.user.id,
+        },
+      },
+      include: options?.include,
+      orderBy: options?.orderBy,
+      take: options?.take,
+      skip: options?.skip,
+    });
+
+    return {
+      success: true,
+      data: transactions,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message:
+        error.name === "CustomError"
+          ? error.message
+          : "An error occurred while getting the transactions.",
+      data: [],
+    };
+  }
+};
+
 export const createTransaction = async (
   data: z.infer<typeof transactionFormSchema>
 ) => {

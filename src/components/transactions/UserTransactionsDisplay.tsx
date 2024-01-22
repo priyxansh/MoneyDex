@@ -1,10 +1,9 @@
-import { authOptions } from "@/lib/next-auth";
-import prisma from "@/lib/prisma";
-import { Session, getServerSession } from "next-auth";
 import _ from "lodash";
 import Transaction from "./Transaction";
 import { TransactionFilter } from "@/types/transaction-filter";
 import { generateTransactionWhereInput } from "@/lib/utils/generateTransactionWhereInput";
+import { getTransactions } from "@/actions/transaction-actions";
+import { Transaction as TransactionType } from "@/types/prisma";
 
 type UserTransactionsDisplayProps = {
   filter?: TransactionFilter;
@@ -17,36 +16,25 @@ const UserTransactionsDisplay = async ({
   page = 1,
   perPage = 10,
 }: UserTransactionsDisplayProps) => {
-  const { user } = (await getServerSession(authOptions)) as Session;
-
   const whereInput = generateTransactionWhereInput(filter);
-
   const skip = (page - 1) * perPage;
   const take = perPage;
 
-  // Todo: put this in a separate function
-  const userTransactions = await prisma.transaction.findMany({
-    where: {
-      ...whereInput,
-      user: {
-        id: user.id,
-      },
-    },
+  const { data: transactions } = await getTransactions({
+    where: whereInput,
     include: {
       fromAccount: true,
       toAccount: true,
       category: true,
     },
-    orderBy: [
-      {
-        createdAt: "desc",
-      },
-    ],
+    orderBy: {
+      createdAt: "desc",
+    },
     skip: skip,
     take: take,
   });
 
-  const transactionsByDate = _.groupBy(userTransactions, (transaction) => {
+  const transactionsByDate = _.groupBy(transactions, (transaction) => {
     return new Date(transaction.createdAt).toDateString();
   });
 
@@ -56,7 +44,7 @@ const UserTransactionsDisplay = async ({
         <span className="hidden sm:inline">Right-click</span>{" "}
         <span className="sm:hidden">Long-press</span> for more options.
       </p>
-      {!userTransactions.length && (
+      {!transactions.length && (
         <p className="text-sm text-gray-500">No results found.</p>
       )}
       <div className="flex flex-col gap-4">
@@ -72,7 +60,7 @@ const UserTransactionsDisplay = async ({
                 {transactionsByDate[date].map((transaction) => {
                   return (
                     <Transaction
-                      transaction={transaction}
+                      transaction={transaction as TransactionType}
                       key={transaction.id}
                     />
                   );
