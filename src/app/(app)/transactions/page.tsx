@@ -46,7 +46,6 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
   // Generate suspense keys
   const suspenseKey = `page=${page}&perPage=${perPage}&filter=${filter}`;
   const filterSuspenseKey = `filter=${filter}`;
-  const paginationSuspenseKey = `page=${page}&perPage=${perPage}&filter=${filter}`;
 
   return (
     <div className="flex flex-col flex-grow">
@@ -74,7 +73,6 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
       </section>
       <Suspense
         fallback={<Skeleton className="w-56 h-10 mt-2 mx-auto rounded-md" />}
-        key={paginationSuspenseKey}
       >
         <TransactionPagination
           page={parsedPage}
