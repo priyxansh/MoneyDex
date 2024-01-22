@@ -450,12 +450,15 @@ export const validateTransactionPaginationParams = async ({
 
   const whereInput = generateTransactionWhereInput(filter);
 
-  const countResult =
-    (await getTransactionCount({
-      where: whereInput,
-    })) ?? 0;
+  const countResult = await getTransactionCount({
+    where: whereInput,
+  });
 
   const count = countResult.count ?? 0;
+
+  if (count === 0) {
+    return;
+  }
 
   const totalPages = Math.ceil(count / perPage);
 

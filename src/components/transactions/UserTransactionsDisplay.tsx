@@ -56,6 +56,9 @@ const UserTransactionsDisplay = async ({
         <span className="hidden sm:inline">Right-click</span>{" "}
         <span className="sm:hidden">Long-press</span> for more options.
       </p>
+      {!userTransactions.length && (
+        <p className="text-sm text-gray-500">No results found.</p>
+      )}
       <div className="flex flex-col gap-4">
         {Object.keys(transactionsByDate).map((date) => {
           return (
