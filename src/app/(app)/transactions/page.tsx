@@ -1,5 +1,6 @@
 import { validateTransactionPaginationParams } from "@/actions/transaction-actions";
 import Spinner from "@/components/Spinner";
+import PerPageSelect from "@/components/transactions/PerPageSelect";
 import TransactionFilters from "@/components/transactions/TransactionFilters";
 import TransactionPagination from "@/components/transactions/TransactionPagination";
 import UserTransactionsDisplay from "@/components/transactions/UserTransactionsDisplay";
@@ -59,8 +60,15 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
         >
           <TransactionFilters />
         </Suspense>
+        <PerPageSelect
+          page={parsedPage}
+          perPage={parsedPerPage}
+          paramsFilter={filter}
+        />
       </section>
-      <Suspense fallback={<Skeleton className="w-56 h-10 mt-2 mx-auto rounded-md"/>}>
+      <Suspense
+        fallback={<Skeleton className="w-56 h-10 mt-2 mx-auto rounded-md" />}
+      >
         <TransactionPagination
           page={parsedPage}
           perPage={parsedPerPage}
