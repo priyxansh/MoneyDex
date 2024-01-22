@@ -21,7 +21,7 @@ type TransactionsPageProps = {
 };
 
 const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
-  const filterSuspenseKey = `filter=${searchParams?.filter}`;
+  // const filterSuspenseKey = `filter=${searchParams?.filter}`;
 
   // Access search params
   const page = searchParams?.page;
@@ -43,6 +43,11 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
     filter: parsedFilter,
   });
 
+  // Generate suspense keys
+  const suspenseKey = `page=${page}&perPage=${perPage}&filter=${filter}`;
+  const filterSuspenseKey = `filter=${filter}`;
+  const paginationSuspenseKey = `page=${page}&perPage=${perPage}&filter=${filter}`;
+
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex justify-between gap-4 flex-wrap">
@@ -57,6 +62,7 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
       <section className="mt-4 flex gap-2 flex-wrap">
         <Suspense
           fallback={<Skeleton className="w-[80px] h-[40px] rounded-md" />}
+          key={filterSuspenseKey}
         >
           <TransactionFilters />
         </Suspense>
@@ -68,6 +74,7 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
       </section>
       <Suspense
         fallback={<Skeleton className="w-56 h-10 mt-2 mx-auto rounded-md" />}
+        key={paginationSuspenseKey}
       >
         <TransactionPagination
           page={parsedPage}
@@ -77,7 +84,7 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
         />
       </Suspense>
       <Suspense
-        key={filterSuspenseKey}
+        key={suspenseKey}
         fallback={<Spinner className="h-7 w-7 m-auto" />}
       >
         <UserTransactionsDisplay
