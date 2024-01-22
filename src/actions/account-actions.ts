@@ -10,7 +10,48 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/next-auth";
 import { revalidatePath } from "next/cache";
-import { TransactionType } from "@prisma/client";
+import { Prisma, TransactionType } from "@prisma/client";
+
+export const getAccounts = async (options?: {
+  where?: Prisma.AccountWhereInput;
+  orderBy?: Prisma.AccountOrderByWithAggregationInput;
+  take?: number;
+  skip?: number;
+}) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  try {
+    const accounts = await prisma.account.findMany({
+      where: {
+        ...options?.where,
+        user: {
+          id: session.user.id,
+        },
+      },
+      orderBy: options?.orderBy,
+      take: options?.take,
+      skip: options?.skip,
+    });
+
+    return {
+      success: true,
+      data: accounts,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message:
+        error.name === "CustomError"
+          ? error.message
+          : "An error occurred while fetching accounts.",
+      data: [],
+    };
+  }
+};
 
 export const createAccount = async (
   data: z.infer<typeof newAccountFormSchema>

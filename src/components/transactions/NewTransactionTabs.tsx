@@ -1,17 +1,21 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { authOptions } from "@/lib/next-auth";
-import { getUserAccounts } from "@/lib/utils/getUserAccounts";
-import { getUserCategories } from "@/lib/utils/getUserCategories";
-import { Session, getServerSession } from "next-auth";
 import NewTransactionForm from "./NewTransactionForm";
+import { getAccounts } from "@/actions/account-actions";
+import { getCategories } from "@/actions/category-actions";
 
 type NewTransactionTabsProps = {};
 
 const NewTransactionTabs = async ({}: NewTransactionTabsProps) => {
-  const { user } = (await getServerSession(authOptions)) as Session;
-
-  const userCategories = await getUserCategories(user.id, "ALL");
-  const userAccounts = await getUserAccounts(user.id);
+  const { data: categories } = await getCategories({
+    orderBy: {
+      name: "asc",
+    },
+  });
+  const { data: accounts } = await getAccounts({
+    orderBy: {
+      name: "asc",
+    },
+  });
 
   return (
     <Tabs defaultValue="INCOME" className="w-full mt-5 h-auto">
@@ -29,22 +33,22 @@ const NewTransactionTabs = async ({}: NewTransactionTabsProps) => {
       <TabsContent value="INCOME">
         <NewTransactionForm
           type="INCOME"
-          userAccounts={userAccounts}
-          userCategories={userCategories}
+          userAccounts={accounts}
+          userCategories={categories}
         />
       </TabsContent>
       <TabsContent value="EXPENSE">
         <NewTransactionForm
           type="EXPENSE"
-          userAccounts={userAccounts}
-          userCategories={userCategories}
+          userAccounts={accounts}
+          userCategories={categories}
         />
       </TabsContent>
       <TabsContent value="TRANSFER">
         <NewTransactionForm
           type="TRANSFER"
-          userAccounts={userAccounts}
-          userCategories={userCategories}
+          userAccounts={accounts}
+          userCategories={categories}
         />
       </TabsContent>
     </Tabs>

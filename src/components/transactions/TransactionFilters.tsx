@@ -1,25 +1,26 @@
-import { getUserAccounts } from "@/lib/utils/getUserAccounts";
-import { Session, getServerSession } from "next-auth";
-import { authOptions } from "@/lib/next-auth";
-import { getUserCategories } from "@/lib/utils/getUserCategories";
 import TransactionFilterSheet from "./TransactionFilterSheet";
 import TransactionFilterProvider from "@/contexts/TransactionFilterContext";
+import { getAccounts } from "@/actions/account-actions";
+import { getCategories } from "@/actions/category-actions";
 
 type TransactionFiltersProps = {};
 
 const TransactionFilters = async ({}: TransactionFiltersProps) => {
-  const session = (await getServerSession(authOptions)) as Session;
-
-  const userAccounts = await getUserAccounts(session.user.id);
-  const userTransactionCategories = await getUserCategories(
-    session.user.id,
-    "ALL"
-  );
+  const { data: accounts } = await getAccounts({
+    orderBy: {
+      name: "asc",
+    },
+  });
+  const { data: categories } = await getCategories({
+    orderBy: {
+      name: "asc",
+    },
+  });
 
   return (
     <TransactionFilterProvider
-      userAccounts={userAccounts}
-      userTransactionCategories={userTransactionCategories}
+      userAccounts={accounts}
+      userTransactionCategories={categories}
     >
       <TransactionFilterSheet />
     </TransactionFilterProvider>

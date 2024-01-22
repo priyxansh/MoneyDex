@@ -1,10 +1,6 @@
-import { authOptions } from "@/lib/next-auth";
-import { Session, getServerSession } from "next-auth";
-import { getUserCategories } from "@/lib/utils/getUserCategories";
-
 import CategoryBox from "./CategoryBox";
-
 import { TransactionCategoryType } from "@prisma/client";
+import { getCategories } from "@/actions/category-actions";
 
 type UserCategoriesDisplayProps = {
   type: TransactionCategoryType | "ALL";
@@ -15,9 +11,23 @@ const UserCategoriesDisplay = async ({
   type,
   searchQuery,
 }: UserCategoriesDisplayProps) => {
-  const { user } = (await getServerSession(authOptions)) as Session;
-
-  const userCategories = await getUserCategories(user.id, type, searchQuery);
+  const { data: categories } = await getCategories({
+    where: {
+      type: type === "ALL" ? undefined : type,
+      name: {
+        contains: searchQuery,
+        mode: "insensitive",
+      },
+    },
+    orderBy: [
+      {
+        type: "asc",
+      },
+      {
+        name: "asc",
+      },
+    ],
+  });
 
   return (
     <div className="flex items-center py-2 rounded-md gap-2 flex-wrap">
@@ -25,10 +35,10 @@ const UserCategoriesDisplay = async ({
         <span className="hidden sm:inline">Right-click</span>{" "}
         <span className="sm:hidden">Long-press</span> for more options.
       </p>
-      {!userCategories.length && (
+      {!categories.length && (
         <p className="text-sm text-gray-500">No results found.</p>
       )}
-      {userCategories.map((category) => (
+      {categories.map((category) => (
         <CategoryBox
           key={category.id}
           name={category.name}

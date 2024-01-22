@@ -3,10 +3,54 @@
 import { authOptions } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
 import { categoryFormSchema } from "@/lib/zod-schemas/categoryFormSchema";
+import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+
+export const getCategories = async (options?: {
+  where?: Prisma.TransactionCategoryWhereInput;
+  orderBy?:
+    | Prisma.TransactionCategoryOrderByWithAggregationInput
+    | Prisma.TransactionCategoryOrderByWithAggregationInput[];
+  take?: number;
+  skip?: number;
+}) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/signin");
+  }
+
+  try {
+    const categories = await prisma.transactionCategory.findMany({
+      where: {
+        ...options?.where,
+        user: {
+          id: session.user.id,
+        },
+      },
+      orderBy: options?.orderBy,
+      take: options?.take,
+      skip: options?.skip,
+    });
+
+    return {
+      success: true,
+      data: categories,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message:
+        error.name === "CustomError"
+          ? error.message
+          : "An error occurred while fetching categories.",
+      data: [],
+    };
+  }
+};
 
 export const createCategory = async (
   data: z.infer<typeof categoryFormSchema>
