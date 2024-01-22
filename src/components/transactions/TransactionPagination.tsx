@@ -1,4 +1,6 @@
 import { getTransactionCount } from "@/actions/transaction-actions";
+import { TransactionFilter } from "@/types/transaction-filter";
+import { generateTransactionWhereInput } from "@/lib/utils/generateTransactionWhereInput";
 
 import {
   Pagination,
@@ -13,18 +15,23 @@ import {
 type TransactionPaginationProps = {
   page?: number;
   perPage?: number;
-  filter?: string;
+  filter?: TransactionFilter;
+  paramsFilter?: string;
 };
 
 const TransactionPagination = async ({
   page = 1,
   perPage = 10,
   filter,
+  paramsFilter,
 }: TransactionPaginationProps) => {
   const skip = page * perPage;
 
+  const whereInput = generateTransactionWhereInput(filter);
+
   const countResult =
     (await getTransactionCount({
+      where: whereInput,
       skip,
     })) ?? 0;
 
@@ -44,7 +51,7 @@ const TransactionPagination = async ({
                 query: {
                   page: page - 1,
                   perPage,
-                  filter: filter,
+                  filter: paramsFilter,
                 },
               }}
             />
@@ -57,7 +64,7 @@ const TransactionPagination = async ({
                     query: {
                       page: page - 1,
                       perPage,
-                      filter: filter,
+                      filter: paramsFilter,
                     },
                   }}
                 >
@@ -72,7 +79,7 @@ const TransactionPagination = async ({
                   query: {
                     page,
                     perPage,
-                    filter: filter,
+                    filter: paramsFilter,
                   },
                 }}
               >
@@ -86,7 +93,7 @@ const TransactionPagination = async ({
                     query: {
                       page: page + 1,
                       perPage,
-                      filter: filter,
+                      filter: paramsFilter,
                     },
                   }}
                 >
@@ -105,7 +112,7 @@ const TransactionPagination = async ({
                 query: {
                   page: page + 1,
                   perPage,
-                  filter: filter,
+                  filter: paramsFilter,
                 },
               }}
             />

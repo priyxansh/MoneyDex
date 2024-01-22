@@ -29,13 +29,17 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
 
   // Parse params to usable values
   const parsedFilter = parseURITransactionFilter(filter);
-  const { parsedPage, parsedPerPage } = parsePaginationParams({ page, perPage });
+  const { parsedPage, parsedPerPage } = parsePaginationParams({
+    page,
+    perPage,
+  });
 
   // Redirect if page params are invalid
   // Todo: do this for filter
   await validateTransactionPaginationParams({
     page: parsedPage,
     perPage: parsedPerPage,
+    filter: parsedFilter,
   });
 
   return (
@@ -56,11 +60,12 @@ const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
           <TransactionFilters />
         </Suspense>
       </section>
-      <Suspense fallback={null}>
+      <Suspense fallback={<Skeleton className="w-56 h-10 mt-2 mx-auto rounded-md"/>}>
         <TransactionPagination
           page={parsedPage}
           perPage={parsedPerPage}
-          filter={filter}
+          filter={parsedFilter}
+          paramsFilter={filter}
         />
       </Suspense>
       <Suspense

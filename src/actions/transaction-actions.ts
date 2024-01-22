@@ -2,8 +2,10 @@
 
 import { authOptions } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
+import { generateTransactionWhereInput } from "@/lib/utils/generateTransactionWhereInput";
 import { handlePageRedirect } from "@/lib/utils/handlePageRedirect";
 import { transactionFormSchema } from "@/lib/zod-schemas/transactionFormSchema";
+import { TransactionFilter } from "@/types/transaction-filter";
 import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -396,7 +398,7 @@ export const getTransactionCount = async ({
   }
 
   try {
-    const whereClause = {
+    const whereInput = {
       ...where,
       user: {
         id: session.user.id,
@@ -404,7 +406,7 @@ export const getTransactionCount = async ({
     };
 
     const count = await prisma.transaction.count({
-      where: whereClause,
+      where: whereInput,
       take: take,
       skip: skip,
     });
@@ -428,9 +430,11 @@ export const getTransactionCount = async ({
 export const validateTransactionPaginationParams = async ({
   page,
   perPage,
+  filter,
 }: {
   page: number;
   perPage: number;
+  filter?: TransactionFilter;
 }) => {
   const session = await getServerSession(authOptions);
 
@@ -444,7 +448,12 @@ export const validateTransactionPaginationParams = async ({
     redirectURL: "/transactions",
   });
 
-  const countResult = (await getTransactionCount({})) ?? 0;
+  const whereInput = generateTransactionWhereInput(filter);
+
+  const countResult =
+    (await getTransactionCount({
+      where: whereInput,
+    })) ?? 0;
 
   const count = countResult.count ?? 0;
 

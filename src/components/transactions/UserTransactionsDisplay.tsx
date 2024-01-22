@@ -4,7 +4,7 @@ import { Session, getServerSession } from "next-auth";
 import _ from "lodash";
 import Transaction from "./Transaction";
 import { TransactionFilter } from "@/types/transaction-filter";
-import { Prisma } from "@prisma/client";
+import { generateTransactionWhereInput } from "@/lib/utils/generateTransactionWhereInput";
 
 type UserTransactionsDisplayProps = {
   filter?: TransactionFilter;
@@ -19,22 +19,7 @@ const UserTransactionsDisplay = async ({
 }: UserTransactionsDisplayProps) => {
   const { user } = (await getServerSession(authOptions)) as Session;
 
-  // Todo: Open Close principle
-  const whereClause: Prisma.TransactionWhereInput = {
-    fromAccountId:
-      filter?.sourceAccounts.length ?? 0 > 0
-        ? { in: filter?.sourceAccounts }
-        : undefined,
-    toAccountId:
-      filter?.targetAccounts.length ?? 0 > 0
-        ? { in: filter?.targetAccounts }
-        : undefined,
-    categoryId:
-      filter?.categories.length ?? 0 > 0
-        ? { in: filter?.categories }
-        : undefined,
-    type: filter?.types.length ?? 0 > 0 ? { in: filter?.types } : undefined,
-  };
+  const whereInput = generateTransactionWhereInput(filter);
 
   const skip = (page - 1) * perPage;
   const take = perPage;
@@ -42,7 +27,7 @@ const UserTransactionsDisplay = async ({
   // Todo: put this in a separate function
   const userTransactions = await prisma.transaction.findMany({
     where: {
-      ...whereClause,
+      ...whereInput,
       user: {
         id: user.id,
       },
