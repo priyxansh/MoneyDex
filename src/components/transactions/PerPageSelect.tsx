@@ -35,7 +35,14 @@ const PerPageSelect = ({ page, perPage, paramsFilter }: PerPageSelectProps) => {
         <span>Per page:</span>
         <SelectValue />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent
+        ref={(ref) => {
+          if (!ref) return;
+          ref.ontouchstart = (e) => {
+            e.preventDefault();
+          };
+        }}
+      >
         <SelectItem value="5">5</SelectItem>
         <SelectItem value="10">10</SelectItem>
         <SelectItem value="15">15</SelectItem>
