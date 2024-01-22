@@ -14,7 +14,9 @@ import { Prisma, TransactionType } from "@prisma/client";
 
 export const getAccounts = async (options?: {
   where?: Prisma.AccountWhereInput;
-  orderBy?: Prisma.AccountOrderByWithAggregationInput;
+  orderBy?:
+    | Prisma.AccountOrderByWithRelationInput
+    | Prisma.AccountOrderByWithRelationInput[];
   take?: number;
   skip?: number;
 }) => {

@@ -12,8 +12,8 @@ import { z } from "zod";
 export const getCategories = async (options?: {
   where?: Prisma.TransactionCategoryWhereInput;
   orderBy?:
-    | Prisma.TransactionCategoryOrderByWithAggregationInput
-    | Prisma.TransactionCategoryOrderByWithAggregationInput[];
+    | Prisma.TransactionCategoryOrderByWithRelationInput
+    | Prisma.TransactionCategoryOrderByWithRelationInput[];
   take?: number;
   skip?: number;
 }) => {
