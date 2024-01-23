@@ -47,7 +47,13 @@ const Transaction = ({ transaction }: TransactionProps) => {
           >
             <Link href={`/transactions/${fromAccount.id}`}>
               <div className="flex flex-col sm:grid grid-cols-2 sm:col-span-2">
-                <span className="text-sm text-left text-primary">
+                <span
+                  className={`text-sm text-left ${
+                    type === "EXPENSE" || type === "DIFFERENCE_EXPENSE"
+                      ? "text-destructive"
+                      : "text-primary"
+                  }`}
+                >
                   {fromAccount.name}
                 </span>
                 <span className="sm:text-sm text-[12px] text-gray-500 line-clamp-2 break-words">
