@@ -11,7 +11,7 @@ const Dashboard = ({}: DashboardProps) => {
       <div className="flex justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
       </div>
-      <section className="mt-2 grid grid-cols-2 grid-rows-2">
+      <section className="mt-4 grid grid-cols-1 sm:grid-cols-2">
         <AccountsOverview />
         <TransactionChart />
         <CategoryChart />
