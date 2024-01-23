@@ -11,26 +11,10 @@ import {
 } from "../ui/context-menu";
 
 import { Transaction } from "@/types/prisma";
+import { getTransactionCategoryName } from "@/lib/utils/getTransactionCategoryName";
 
 type TransactionProps = {
   transaction: Transaction;
-};
-
-const returnCategoryName = ({
-  fromAccount,
-  toAccount,
-  type,
-  category,
-}: Transaction) => {
-  if (type === "TRANSFER") {
-    return `${fromAccount.name} -> ${toAccount?.name}`;
-  }
-
-  if (type === "DIFFERENCE_EXPENSE" || type === "DIFFERENCE_INCOME") {
-    return `Difference`;
-  }
-
-  return category ? category.name : `General`;
 };
 
 const Transaction = ({ transaction }: TransactionProps) => {
@@ -57,7 +41,7 @@ const Transaction = ({ transaction }: TransactionProps) => {
                   {fromAccount.name}
                 </span>
                 <span className="sm:text-sm text-[12px] text-gray-500 line-clamp-2 break-words">
-                  {returnCategoryName(transaction)}
+                  {getTransactionCategoryName(transaction)}
                 </span>
               </div>
               <span
