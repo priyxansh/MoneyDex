@@ -14,11 +14,11 @@ import {
 type AccountsOverviewProps = {};
 
 const AccountsOverview = async ({}: AccountsOverviewProps) => {
-  const { data: accounts } = await getAccounts({
+  const { success, data: accounts } = await getAccounts({
     orderBy: {
       balance: "desc",
     },
-    take: 5,
+    take: 3,
   });
 
   return (
@@ -27,7 +27,7 @@ const AccountsOverview = async ({}: AccountsOverviewProps) => {
         Accounts Overview
       </h3>
       <div className="rounded-lg border-2 overflow-hidden">
-        <Table className="">
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Account</TableHead>
@@ -38,7 +38,9 @@ const AccountsOverview = async ({}: AccountsOverviewProps) => {
             {accounts.map((account) => (
               <TableRow key={account.id}>
                 <TableCell className="font-medium">{account.name}</TableCell>
-                <TableCell className="text-right text-primary font-semibold">${account.balance}</TableCell>
+                <TableCell className="text-right text-primary font-semibold">
+                  ${account.balance}
+                </TableCell>
               </TableRow>
             ))}
             <TableRow>
