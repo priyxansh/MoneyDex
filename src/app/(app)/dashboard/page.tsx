@@ -11,11 +11,13 @@ const Dashboard = ({}: DashboardProps) => {
       <div className="flex justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
       </div>
-      <section className="mt-4 grid grid-cols-1 sm:grid-cols-2">
+      {/* Todo: Use container query instead of media query */}
+      {/* Todo: Wrap in suspense */}
+      <section className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <AccountsOverview />
         <TransactionChart />
-        <CategoryChart />
         <RecentTransactions />
+        <CategoryChart />
       </section>
     </div>
   );
