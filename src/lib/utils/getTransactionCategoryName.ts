@@ -5,7 +5,13 @@ export const getTransactionCategoryName = ({
   toAccount,
   type,
   category,
-}: Transaction) => {
+}: Transaction<{
+  include: {
+    fromAccount: true;
+    toAccount: true;
+    category: true;
+  };
+}>) => {
   if (type === "TRANSFER") {
     return `${fromAccount.name} -> ${toAccount?.name}`;
   }

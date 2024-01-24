@@ -29,7 +29,13 @@ const RecentTransactions = async ({}: RecentTransactionsProps) => {
     take: 3,
   });
 
-  const transactions = data as Transaction[];
+  const transactions = data as Transaction<{
+    include: {
+      fromAccount: true;
+      toAccount: true;
+      category: true;
+    };
+  }>[];
 
   return (
     <section className="flex flex-col gap-2">

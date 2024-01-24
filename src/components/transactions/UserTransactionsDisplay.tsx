@@ -20,7 +20,7 @@ const UserTransactionsDisplay = async ({
   const skip = (page - 1) * perPage;
   const take = perPage;
 
-  const { data: transactions } = await getTransactions({
+  const { data } = await getTransactions({
     where: whereInput,
     include: {
       fromAccount: true,
@@ -33,6 +33,14 @@ const UserTransactionsDisplay = async ({
     skip: skip,
     take: take,
   });
+
+  const transactions = data as TransactionType<{
+    include: {
+      fromAccount: true;
+      toAccount: true;
+      category: true;
+    };
+  }>[];
 
   const transactionsByDate = _.groupBy(transactions, (transaction) => {
     return new Date(transaction.createdAt).toDateString();
@@ -60,7 +68,7 @@ const UserTransactionsDisplay = async ({
                 {transactionsByDate[date].map((transaction) => {
                   return (
                     <Transaction
-                      transaction={transaction as TransactionType}
+                      transaction={transaction}
                       key={transaction.id}
                     />
                   );

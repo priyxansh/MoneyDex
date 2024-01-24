@@ -14,7 +14,13 @@ import { Transaction } from "@/types/prisma";
 import { getTransactionCategoryName } from "@/lib/utils/getTransactionCategoryName";
 
 type TransactionProps = {
-  transaction: Transaction;
+  transaction: Transaction<{
+    include: {
+      fromAccount: true;
+      toAccount: true;
+      category: true;
+    };
+  }>;
 };
 
 const Transaction = ({ transaction }: TransactionProps) => {

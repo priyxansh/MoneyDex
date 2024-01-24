@@ -6,10 +6,5 @@ export type Account = Prisma.AccountGetPayload<{
   };
 }>;
 
-export type Transaction = Prisma.TransactionGetPayload<{
-  include: {
-    category: true;
-    fromAccount: true;
-    toAccount: true;
-  };
-}>;
+export type Transaction<T extends Prisma.TransactionDefaultArgs> =
+  Prisma.TransactionGetPayload<T>;
