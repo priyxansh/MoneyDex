@@ -9,7 +9,7 @@ const AccountsOverview = async ({}: AccountsOverviewProps) => {
     orderBy: {
       balance: "desc",
     },
-    take: 3,
+    take: 5,
   });
 
   return (

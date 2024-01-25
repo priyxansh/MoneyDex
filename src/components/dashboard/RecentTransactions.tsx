@@ -16,7 +16,7 @@ const RecentTransactions = async ({}: RecentTransactionsProps) => {
       toAccount: true,
       category: true,
     },
-    take: 3,
+    take: 5,
   });
 
   const transactions = data as Transaction<{
