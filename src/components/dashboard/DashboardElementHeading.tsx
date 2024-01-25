@@ -4,7 +4,7 @@ type DashboardElementHeadingProps = {
 
 const DashboardElementHeading = ({ title }: DashboardElementHeadingProps) => {
   return (
-    <h3 className="text-base font-semibold text-muted-foreground">{title}</h3>
+    <h3 className="text-sm sm:text-base font-semibold text-muted-foreground text-center sm:text-left">{title}</h3>
   );
 };
 
