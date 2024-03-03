@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import HeroButtons from "./HeroButtons";
 import { Skeleton } from "../ui/skeleton";
+import HeroImage from "./HeroImage";
 
 type HeroProps = {};
 
 const Hero = ({}: HeroProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-0">
       <div className="text-center sm:text-left flex flex-col gap-4 items-center">
         <h1 className="text-2xl sm:text-5xl sm:leading-snug font-medium">
           Manage your funds easily with{" "}
@@ -24,7 +25,9 @@ const Hero = ({}: HeroProps) => {
           </Suspense>
         </div>
       </div>
-      <div>{/* Todo: add Hero image/illustration */}</div>
+      <div className="flex items-center justify-center">
+        <HeroImage width={350} />
+      </div>
     </div>
   );
 };
